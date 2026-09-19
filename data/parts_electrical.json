@@ -1,0 +1,90 @@
+[
+  {
+    "id": 201,
+    "category_id": 2,
+    "name": "กล่อง CDI",
+    "name_en": "CDI Unit (Capacitor Discharge Ignition)",
+    "part_number": "ELE-CDI-001",
+    "price": 420.00,
+    "stock_quantity": 20,
+    "unit": "กล่อง",
+    "description": "กล่องควบคุมการจุดระเบิดอิเล็กทรอนิกส์ ให้ประกายไฟแม่นยำทุกรอบเครื่องยนต์ สตาร์ทติดง่าย"
+  },
+  {
+    "id": 202,
+    "category_id": 2,
+    "name": "คอยล์จุดระเบิด",
+    "name_en": "Ignition Coil",
+    "part_number": "ELE-IGN-002",
+    "price": 260.00,
+    "stock_quantity": 25,
+    "unit": "ตัว",
+    "description": "คอยล์เพิ่มแรงดันไฟฟ้าแรงสูง แปลงไฟ 12V เป็นประกายไฟส่งตรงสู่หัวเทียน เผาไหม้สมบูรณ์"
+  },
+  {
+    "id": 203,
+    "category_id": 2,
+    "name": "ไดชาร์จ (มัดไฟ)",
+    "name_en": "Stator Coil Assembly",
+    "part_number": "ELE-STA-003",
+    "price": 750.00,
+    "stock_quantity": 15,
+    "unit": "ชุด",
+    "description": "ชุดขดลวดสเตเตอร์ผลิตกระแสไฟฟ้ากระแสสลับ ทนความร้อนจากน้ำมันเครื่อง จ่ายไฟนิ่งสม่ำเสมอ"
+  },
+  {
+    "id": 204,
+    "category_id": 2,
+    "name": "หลอดไฟหน้า LED",
+    "name_en": "LED Headlight Bulb H4",
+    "part_number": "ELE-LGT-H01",
+    "price": 190.00,
+    "stock_quantity": 50,
+    "unit": "หลอด",
+    "description": "หลอดไฟหน้ารถจักรยานยนต์ขั้ว H4 แสงขาว 6000K ความสว่างสูง ส่องสว่างได้ไกล ประหยัดพลังงาน"
+  },
+  {
+    "id": 205,
+    "category_id": 2,
+    "name": "หลอดไฟท้าย/ไฟเบรก",
+    "name_en": "Tail & Brake Light Bulb",
+    "part_number": "ELE-LGT-T02",
+    "price": 45.00,
+    "stock_quantity": 80,
+    "unit": "หลอด",
+    "description": "หลอดไฟท้ายสองไส้ 12V 21/5W สำหรับไฟหรี่และไฟเบรก ทนแรงสั่นสะเทือนสูง"
+  },
+  {
+    "id": 206,
+    "category_id": 2,
+    "name": "แบตเตอรี่แห้ง 12V 5Ah",
+    "name_en": "Maintenance-Free Battery 12V 5Ah",
+    "part_number": "ELE-BAT-1205",
+    "price": 580.00,
+    "stock_quantity": 22,
+    "unit": "ลูก",
+    "description": "แบตเตอรี่แห้งชนิดไม่ต้องเติมน้ำกลั่น ขนาด 12V 5Ah จ่ายกระแสไฟสตาร์ทสูง (CCA) ทนทาน ไม่รั่วซึม"
+  },
+  {
+    "id": 207,
+    "category_id": 2,
+    "name": "รีเลย์สตาร์ท",
+    "name_en": "Starter Relay Solenoid",
+    "part_number": "ELE-RLY-007",
+    "price": 150.00,
+    "stock_quantity": 30,
+    "unit": "ตัว",
+    "description": "รีเลย์สตาร์ทไฟฟ้ากระแสตรง ควบคุมการทำงานของมอเตอร์สตาร์ท หน้าสัมผัสทองแดงนำไฟฟ้าดีเยี่ยม"
+  },
+  {
+    "id": 208,
+    "category_id": 2,
+    "name": "มอเตอร์สตาร์ท",
+    "name_en": "Starter Motor",
+    "part_number": "ELE-STR-008",
+    "price": 890.00,
+    "stock_quantity": 14,
+    "unit": "ลูก",
+    "description": "ไดสตาร์ทคุณภาพสูง แรงบิดสตาร์ทสูง หมุนลื่นไหลไม่ติดขัด ทนทานสำหรับรถมอเตอร์ไซค์หัวฉีดและคาร์บูเรเตอร์"
+  }
+]

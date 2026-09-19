@@ -1,0 +1,90 @@
+[
+  {
+    "id": 101,
+    "category_id": 1,
+    "name": "ลูกสูบ (ชุดมาตรฐาน)",
+    "name_en": "Piston Kit (Standard Size)",
+    "part_number": "ENG-PST-001",
+    "price": 450.00,
+    "stock_quantity": 25,
+    "unit": "ชุด",
+    "description": "ชุดลูกสูบขนาดมาตรฐาน (STD) ผลิตจากอะลูมิเนียมอัลลอยคุณภาพสูง ทนความร้อนและแรงดันสูง สำหรับมอเตอร์ไซค์ 110-125cc"
+  },
+  {
+    "id": 102,
+    "category_id": 1,
+    "name": "แหวนลูกสูบ",
+    "name_en": "Piston Ring Set",
+    "part_number": "ENG-RNG-002",
+    "price": 180.00,
+    "stock_quantity": 40,
+    "unit": "ชุด",
+    "description": "ชุดแหวนลูกสูบเหล็กชุบโครเมียม เพิ่มประสิทธิภาพกำลังอัดและป้องกันการรั่วซึมของน้ำมันเครื่องเข้าห้องเผาไหม้"
+  },
+  {
+    "id": 103,
+    "category_id": 1,
+    "name": "วาล์วไอดี",
+    "name_en": "Intake Valve",
+    "part_number": "ENG-VLV-IN01",
+    "price": 160.00,
+    "stock_quantity": 30,
+    "unit": "ตัว",
+    "description": "วาล์วไอดีผลิตจากเหล็กกล้าทนความร้อนสูง ควบคุมการไหลของไอดีเข้าห้องเผาไหม้ได้อย่างแม่นยำ"
+  },
+  {
+    "id": 104,
+    "category_id": 1,
+    "name": "วาล์วไอเสีย",
+    "name_en": "Exhaust Valve",
+    "part_number": "ENG-VLV-EX01",
+    "price": 180.00,
+    "stock_quantity": 30,
+    "unit": "ตัว",
+    "description": "วาล์วไอเสียทนทานต่อการกัดกร่อนจากก๊าซไอเสียร้อนระบายความร้อนได้ดีเยี่ยม ยืดอายุการใช้งาน"
+  },
+  {
+    "id": 105,
+    "category_id": 1,
+    "name": "โซ่ราวลิ้น",
+    "name_en": "Cam Timing Chain",
+    "part_number": "ENG-CHN-090",
+    "price": 280.00,
+    "stock_quantity": 35,
+    "unit": "เส้น",
+    "description": "โซ่ราวลิ้น 90 ข้อ ข้อต่อแข็งแรง ทนทาน ไร้เสียงรบกวน ควบคุมจังหวะเพลาลูกเบี้ยวได้อย่างแม่นยำ"
+  },
+  {
+    "id": 106,
+    "category_id": 1,
+    "name": "ปะเก็นฝาสูบ",
+    "name_en": "Cylinder Head Gasket",
+    "part_number": "ENG-GSK-001",
+    "price": 95.00,
+    "stock_quantity": 60,
+    "unit": "แผ่น",
+    "description": "ปะเก็นฝาสูบเนื้อทองแดงผสมไฟเบอร์ทนความร้อน ป้องกันการรั่วซึมของกำลังอัดและน้ำหล่อเย็นอย่างสมบูรณ์แบบ"
+  },
+  {
+    "id": 107,
+    "category_id": 1,
+    "name": "ก้านสูบ",
+    "name_en": "Connecting Rod Assembly",
+    "part_number": "ENG-ROD-010",
+    "price": 650.00,
+    "stock_quantity": 18,
+    "unit": "ชุด",
+    "description": "ชุดก้านสูบเหล็กฟอร์จพร้อมลูกปืนปลายก้านและสลักก้านสูบ รับแรงกระแทกจากลูกสูบได้อย่างดีเยี่ยม"
+  },
+  {
+    "id": 108,
+    "category_id": 1,
+    "name": "เสื้อสูบ",
+    "name_en": "Cylinder Block",
+    "part_number": "ENG-BLK-125",
+    "price": 1450.00,
+    "stock_quantity": 12,
+    "unit": "ชิ้น",
+    "description": "เสื้อสูบอะลูมิเนียมหล่อพร้อมปลอกสูบเหล็กหล่อพิเศษ ระบายความร้อนได้รวดเร็ว แข็งแรง ทนต่อการเสียดสี"
+  }
+]

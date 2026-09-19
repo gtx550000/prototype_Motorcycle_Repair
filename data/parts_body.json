@@ -1,0 +1,90 @@
+[
+  {
+    "id": 301,
+    "category_id": 3,
+    "name": "บังโคลนหน้า",
+    "name_en": "Front Fender",
+    "part_number": "BDY-FEN-F01",
+    "price": 320.00,
+    "stock_quantity": 16,
+    "unit": "ชิ้น",
+    "description": "บังโคลนหน้าพลาสติก ABS เกรดเหนียวพิเศษ ทนต่อแรงกระแทก เคลือบสีเงางาม ทนแดดไม่ซีดจางง่าย"
+  },
+  {
+    "id": 302,
+    "category_id": 3,
+    "name": "บังโคลนหลัง (กันดีด)",
+    "name_en": "Rear Fender",
+    "part_number": "BDY-FEN-R02",
+    "price": 280.00,
+    "stock_quantity": 20,
+    "unit": "ชิ้น",
+    "description": "บังโคลนท้ายพลาสติกทนทาน พร้อมขายึดและช่องติดตั้งไฟส่องป้ายทะเบียน ป้องกันน้ำและโคลนกระเด็น"
+  },
+  {
+    "id": 303,
+    "category_id": 3,
+    "name": "ฝาครอบข้าง ซ้าย-ขวา",
+    "name_en": "Side Cover Set (L/R)",
+    "part_number": "BDY-COV-S03",
+    "price": 490.00,
+    "stock_quantity": 12,
+    "unit": "คู่",
+    "description": "ชุดฝาครอบตัวถังด้านข้างซ้าย-ขวา พลาสติกเกรดเอ จุดยึดตรงรุ่น เข้ารูปกับเฟรมรถอย่างแนบสนิท"
+  },
+  {
+    "id": 304,
+    "category_id": 3,
+    "name": "เบาะนั่งทรงสปอร์ต",
+    "name_en": "Motorcycle Seat Assembly",
+    "part_number": "BDY-SET-004",
+    "price": 750.00,
+    "stock_quantity": 10,
+    "unit": "ใบ",
+    "description": "เบาะนั่งฟองน้ำฉีดขึ้นรูปหนานุ่ม หุ้มด้วยหนัง PU กันน้ำ เย็บตะเข็บด้ายคู่สวยงาม ไม่เมื่อยขณะขับขี่ระยะไกล"
+  },
+  {
+    "id": 305,
+    "category_id": 3,
+    "name": "กระจกมองข้าง ทรงศูนย์",
+    "name_en": "Rearview Mirrors (Pair)",
+    "part_number": "BDY-MIR-005",
+    "price": 180.00,
+    "stock_quantity": 35,
+    "unit": "คู่",
+    "description": "กระจกมองหลังซ้าย-ขวา เกลียวหมุนมาตรฐาน กระจกตัดแสงเพิ่มทัศนวิสัย ปรับมุมมองได้ง่าย ไม่สั่นคลอน"
+  },
+  {
+    "id": 306,
+    "category_id": 3,
+    "name": "ท่อไอเสียมาตรฐาน มอก.",
+    "name_en": "Exhaust Muffler Assembly",
+    "part_number": "BDY-EXH-006",
+    "price": 1850.00,
+    "stock_quantity": 8,
+    "unit": "ชุด",
+    "description": "ท่อไอเสียพร้อมแผ่นกันความร้อน เหล็กเคลือบสีกันสนิมทนความร้อน เสียงเงียบผ่านมาตรฐาน มอก."
+  },
+  {
+    "id": 307,
+    "category_id": 3,
+    "name": "ปลอกแฮนด์ / มือจับยาง",
+    "name_en": "Handlebar Rubber Grips",
+    "part_number": "BDY-GRP-007",
+    "price": 120.00,
+    "stock_quantity": 45,
+    "unit": "คู่",
+    "description": "ปลอกแฮนด์ยางสังเคราะห์นุ่มกระชับมือ ลายกันลื่น ลดอาการเมื่อยล้าและซับแรงสั่นสะเทือนจากแฮนด์"
+  },
+  {
+    "id": 308,
+    "category_id": 3,
+    "name": "สวิตช์แฮนด์รวม / สวิตช์ไฟ",
+    "name_en": "Handlebar Switch Assembly",
+    "part_number": "BDY-SWT-008",
+    "price": 340.00,
+    "stock_quantity": 18,
+    "unit": "ชุด",
+    "description": "ชุดสวิตช์แฮนด์ซ้าย-ขวา ควบคุมไฟสูง-ต่ำ ไฟเลี้ยว สวิตช์แตร และปุ่มสตาร์ท สายไฟตรงรุ่นเสียบใช้งานได้ทันที"
+  }
+]

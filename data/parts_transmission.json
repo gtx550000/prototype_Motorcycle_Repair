@@ -1,0 +1,90 @@
+[
+  {
+    "id": 601,
+    "category_id": 6,
+    "name": "โซ่ขับเคลื่อนข้อหนา 428H-120L",
+    "name_en": "Heavy-Duty Drive Chain 428H-120L",
+    "part_number": "TRN-CHN-428H",
+    "price": 350.00,
+    "stock_quantity": 30,
+    "unit": "เส้น",
+    "description": "โซ่ส่งกำลังเบอร์ 428H แผ่นข้อหนาพิเศษ ทนแรงดึงสูง เคลือบสารหล่อลื่นกันสนิม ส่งกำลังได้ราบรื่น"
+  },
+  {
+    "id": 602,
+    "category_id": 6,
+    "name": "สเตอร์หน้า 14 ฟัน (14T)",
+    "name_en": "Front Sprocket 14T (428)",
+    "part_number": "TRN-SPK-F14",
+    "price": 95.00,
+    "stock_quantity": 40,
+    "unit": "อัน",
+    "description": "สเตอร์หน้าเหล็กกล้าผสมคาร์บอนสูง ชุบแข็งบริเวณฟันเกียร์ ทนทานต่อการสึกหรอ เข้ากับโซ่ 428 ได้พอดี"
+  },
+  {
+    "id": 603,
+    "category_id": 6,
+    "name": "สเตอร์หลัง 36 ฟัน (36T)",
+    "name_en": "Rear Sprocket 36T (428)",
+    "part_number": "TRN-SPK-R36",
+    "price": 220.00,
+    "stock_quantity": 35,
+    "unit": "อัน",
+    "description": "สเตอร์หลังเหล็กชุบแข็ง น้ำหนักเบา ออกแบบร่องฟันแม่นยำ ลดการเสียดทาน ยืดอายุการใช้งานของโซ่"
+  },
+  {
+    "id": 604,
+    "category_id": 6,
+    "name": "ชุดแผ่นคลัตช์และแผ่นเหล็ก",
+    "name_en": "Clutch Friction Plate & Disc Set",
+    "part_number": "TRN-CLT-SET01",
+    "price": 460.00,
+    "stock_quantity": 22,
+    "unit": "ชุด",
+    "description": "ชุดแผ่นคลัตช์เนื้อคาร์บอนเคฟลาร์และแผ่นเหล็กสปริง จับตัวแน่นไม่ลื่นไถล ออกตัวและเร่งแซงได้รวดเร็ว"
+  },
+  {
+    "id": 605,
+    "category_id": 6,
+    "name": "สายคลัตช์เส้นลวดสแตนเลส",
+    "name_en": "Clutch Cable Assembly",
+    "part_number": "TRN-CBL-CLT01",
+    "price": 140.00,
+    "stock_quantity": 25,
+    "unit": "เส้น",
+    "description": "สายคลัตช์สแตนเลสถักหุ้มปลอกไนลอนลดแรงเสียดทาน ให้สัมผัสการบีบคลัตช์นุ่มนวล แม่นยำ ไม่ฝืด"
+  },
+  {
+    "id": 606,
+    "category_id": 6,
+    "name": "ชุดเฟืองเกียร์ขับ-ตาม (เกียร์หลัก)",
+    "name_en": "Main Transmission Gear Shaft & Gears",
+    "part_number": "TRN-GER-M01",
+    "price": 1200.00,
+    "stock_quantity": 10,
+    "unit": "ชุด",
+    "description": "ชุดเพลาเกียร์และเฟืองส่งกำลังผ่านกระบวนการชุบแข็งแบบ Carburizing ทนต่อแรงบิดสูง สับเกียร์ง่าย นิ่มนวล"
+  },
+  {
+    "id": 607,
+    "category_id": 6,
+    "name": "ลูกปืนตลับแกนเกียร์ความเร็วรอบสูง",
+    "name_en": "Transmission Shaft Ball Bearing 6203",
+    "part_number": "TRN-BRG-6203",
+    "price": 110.00,
+    "stock_quantity": 50,
+    "unit": "ตลับ",
+    "description": "ตลับลูกปืนเม็ดกลมรอบจัด เกรด C3 ทนความร้อนและรอบจัดในห้องเกียร์ หมุนคล่องตัว เสียงเงียบ"
+  },
+  {
+    "id": 608,
+    "category_id": 6,
+    "name": "ซีลน้ำมันแกนคันเกียร์",
+    "name_en": "Gear Shift Shaft Oil Seal",
+    "part_number": "TRN-SEL-GS01",
+    "price": 45.00,
+    "stock_quantity": 60,
+    "unit": "ตัว",
+    "description": "ซีลยางไนไตรล์ (NBR) ทนน้ำมันเครื่องและความร้อน ป้องกันน้ำมันซึมออกจากแกนคันเกียร์ได้อย่างมีประสิทธิภาพ"
+  }
+]
