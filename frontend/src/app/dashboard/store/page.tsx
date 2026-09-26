@@ -23,8 +23,32 @@ export default function POSPage() {
   const [activeTab, setActiveTab] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // ฟังก์ชันชำระเงิน: บันทึกตะกร้าลง localStorage แล้วนำทางไปหน้า Payment
+  // โหลดตะกร้าจาก localStorage ตอนเปิดหน้า (เก็บสถานะไว้เมื่อย้อนกลับมา)
+  useEffect(() => {
+    try {
+      const savedCart = localStorage.getItem('pos_cart');
+      if (savedCart) {
+        const parsed = JSON.parse(savedCart);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setCart(parsed);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load cart from localStorage:', err);
+    } finally {
+      setIsLoaded(true);
+    }
+  }, []);
+
+  // บันทึกตะกร้าลง localStorage ทุกครั้งที่ตะกร้าเปลี่ยน (เฉพาะหลังจากโหลดข้อมูลเดิมเสร็จแล้วเท่านั้น)
+  useEffect(() => {
+    if (!isLoaded) return;
+    localStorage.setItem('pos_cart', JSON.stringify(cart));
+  }, [cart, isLoaded]);
+
+  // ฟังก์ชันชำระเงิน: นำทางไปหน้า Payment (บันทึกข้อมูลตะกร้าลง localStorage เพื่อความชัวร์)
   const handleCheckout = () => {
     if (cart.length === 0) return;
     localStorage.setItem('pos_cart', JSON.stringify(cart));
@@ -290,7 +314,10 @@ export default function POSPage() {
                     ชำระเงิน
                   </button>
                   <button
-                    onClick={() => setCart([])}
+                    onClick={() => {
+                      setCart([]);
+                      localStorage.removeItem('pos_cart');
+                    }}
                     className="w-full mt-2 border border-red-200 text-red-500 py-2 rounded-lg text-sm hover:bg-red-50 transition"
                   >
                     ล้างตะกร้า

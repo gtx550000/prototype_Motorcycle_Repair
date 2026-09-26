@@ -73,7 +73,7 @@ export const CategoryList = () => {
         </div>
       )
     },
-    { header: 'ชื่อภาษาอังกฤษ', accessor: 'name_en' },
+    { header: 'ชื่อภาษาอังกฤษ', accessor: (row: Category) => row.name_en || '-' },
     { 
       header: 'รายละเอียด', 
       accessor: (row: Category) => row.description?.startsWith('รหัสอ้างอิง:') ? '-' : row.description 

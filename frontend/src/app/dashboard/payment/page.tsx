@@ -36,15 +36,16 @@ export default function MultiStepCheckout() {
     if (savedCart) {
       try {
         const parsed = JSON.parse(savedCart);
-        setCartItems(parsed);
-      } catch {
-        // ถ้าอ่านไม่ได้ให้กลับไปหน้าร้าน
-        router.push('/dashboard/store');
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setCartItems(parsed);
+          return;
+        }
+      } catch (err) {
+        console.error('Error reading pos_cart in payment:', err);
       }
-    } else {
-      // ถ้าไม่มีข้อมูลตะกร้า ให้กลับไปหน้าร้าน
-      router.push('/dashboard/store');
     }
+    // ถ้าไม่มีข้อมูลตะกร้า ให้กลับไปหน้าร้าน
+    router.push('/dashboard/store');
   }, [router]);
 
   // คำนวณยอดรวม
