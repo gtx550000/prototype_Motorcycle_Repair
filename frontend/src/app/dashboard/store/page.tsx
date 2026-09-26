@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
 import { ShoppingCart, Plus, Minus, Trash2, Clock, CheckCircle, Search, Package } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useCategories } from '@/hooks/useCategories';
 import { useAuth } from '@/hooks/useAuth';
 import { Category } from '@/types/category';
@@ -18,9 +19,17 @@ interface CartItem {
 export default function POSPage() {
   const { categories, fetchCategories, loading } = useCategories();
   const { user } = useAuth();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [cart, setCart] = useState<CartItem[]>([]);
+
+  // ฟังก์ชันชำระเงิน: บันทึกตะกร้าลง localStorage แล้วนำทางไปหน้า Payment
+  const handleCheckout = () => {
+    if (cart.length === 0) return;
+    localStorage.setItem('pos_cart', JSON.stringify(cart));
+    router.push('/dashboard/payment');
+  };
 
   // ดึงข้อมูลหมวดหมู่จาก API (per_page=100 เพื่อดึงมาทั้งหมด)
   useEffect(() => {
@@ -273,7 +282,10 @@ export default function POSPage() {
                     <span>ยอดรวม</span>
                     <span>฿{totalAmount.toLocaleString()}</span>
                   </div>
-                  <button className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 transition flex items-center justify-center gap-2">
+                  <button 
+                    onClick={handleCheckout}
+                    className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                  >
                     <CheckCircle className="w-4 h-4" />
                     ชำระเงิน
                   </button>
