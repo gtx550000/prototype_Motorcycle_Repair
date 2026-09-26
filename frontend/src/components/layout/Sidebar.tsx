@@ -10,6 +10,7 @@ export const Sidebar = () => {
   const links = [
     { href: '/dashboard', label: '📊 แดชบอร์ด' },
     { href: '/dashboard/categories', label: '📦 หมวดหมู่อะไหล่' },
+    { href: '/dashboard/store', label: '🛒 หน้าร้าน (POS)' },
   ];
 
   return (
