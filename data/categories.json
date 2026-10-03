@@ -1,0 +1,962 @@
+[
+  {
+    "id": 1,
+    "name": "อะไหล่สิ้นเปลืองและงานเซอร์วิส",
+    "name_en": "Fast-Moving & Service Parts",
+    "description": "รหัสอ้างอิง: CAT001",
+    "icon": "⚙️",
+    "parent_id": null,
+    "is_active": true,
+    "sort_order": 1
+  },
+  {
+    "id": 2,
+    "name": "ระบบขับเคลื่อนและช่วงล่าง",
+    "name_en": "Drive Train & Suspension",
+    "description": "รหัสอ้างอิง: CAT002",
+    "icon": "⛓️",
+    "parent_id": null,
+    "is_active": true,
+    "sort_order": 2
+  },
+  {
+    "id": 3,
+    "name": "ล้อและยาง",
+    "name_en": "Wheels & Tires",
+    "description": "รหัสอ้างอิง: CAT003",
+    "icon": "🏍️",
+    "parent_id": null,
+    "is_active": true,
+    "sort_order": 3
+  },
+  {
+    "id": 4,
+    "name": "ระบบไฟและเครื่องยนต์",
+    "name_en": "Electrical & Engine Parts",
+    "description": "รหัสอ้างอิง: CAT004",
+    "icon": "⚡",
+    "parent_id": null,
+    "is_active": true,
+    "sort_order": 4
+  },
+  {
+    "id": 5,
+    "name": "โครงรถและอุปกรณ์ตกแต่ง",
+    "name_en": "Body & Accessories",
+    "description": "รหัสอ้างอิง: CAT005",
+    "icon": "🛵",
+    "parent_id": null,
+    "is_active": true,
+    "sort_order": 5
+  },
+  {
+    "id": 6,
+    "name": "ระบบของเหลว",
+    "name_en": "Fluids",
+    "description": "รหัสอ้างอิง: SUB001",
+    "icon": "💧",
+    "parent_id": 1,
+    "is_active": true,
+    "sort_order": 6
+  },
+  {
+    "id": 7,
+    "name": "ระบบไฟและจุดระเบิดพื้นฐาน",
+    "name_en": "Basic Electrical & Ignition",
+    "description": "รหัสอ้างอิง: SUB002",
+    "icon": "🔌",
+    "parent_id": 1,
+    "is_active": true,
+    "sort_order": 7
+  },
+  {
+    "id": 8,
+    "name": "ระบบกรอง",
+    "name_en": "Filters",
+    "description": "รหัสอ้างอิง: SUB003",
+    "icon": "🌪️",
+    "parent_id": 1,
+    "is_active": true,
+    "sort_order": 8
+  },
+  {
+    "id": 9,
+    "name": "ระบบเบรก",
+    "name_en": "Brake System",
+    "description": "รหัสอ้างอิง: SUB004",
+    "icon": "🛑",
+    "parent_id": 1,
+    "is_active": true,
+    "sort_order": 9
+  },
+  {
+    "id": 10,
+    "name": "ระบบโซ่และสเตอร์",
+    "name_en": "Chain & Sprocket",
+    "description": "รหัสอ้างอิง: SUB005",
+    "icon": "🔗",
+    "parent_id": 2,
+    "is_active": true,
+    "sort_order": 10
+  },
+  {
+    "id": 11,
+    "name": "ระบบสายพานอัตโนมัติ",
+    "name_en": "CVT System",
+    "description": "รหัสอ้างอิง: SUB006",
+    "icon": "🔄",
+    "parent_id": 2,
+    "is_active": true,
+    "sort_order": 11
+  },
+  {
+    "id": 12,
+    "name": "ระบบกันสะเทือน",
+    "name_en": "Suspension",
+    "description": "รหัสอ้างอิง: SUB007",
+    "icon": "〰️",
+    "parent_id": 2,
+    "is_active": true,
+    "sort_order": 12
+  },
+  {
+    "id": 13,
+    "name": "ลูกปืนและบูช",
+    "name_en": "Bearings & Bushings",
+    "description": "รหัสอ้างอิง: SUB008",
+    "icon": "🛞",
+    "parent_id": 2,
+    "is_active": true,
+    "sort_order": 13
+  },
+  {
+    "id": 14,
+    "name": "ยางรถจักรยานยนต์",
+    "name_en": "Motorcycle Tires",
+    "description": "รหัสอ้างอิง: SUB009",
+    "icon": "🍩",
+    "parent_id": 3,
+    "is_active": true,
+    "sort_order": 14
+  },
+  {
+    "id": 15,
+    "name": "อุปกรณ์ล้อ",
+    "name_en": "Wheel Components",
+    "description": "รหัสอ้างอิง: SUB010",
+    "icon": "⚙️",
+    "parent_id": 3,
+    "is_active": true,
+    "sort_order": 15
+  },
+  {
+    "id": 16,
+    "name": "ระบบไฟควบคุม",
+    "name_en": "Electrical Control",
+    "description": "รหัสอ้างอิง: SUB011",
+    "icon": "🎛️",
+    "parent_id": 4,
+    "is_active": true,
+    "sort_order": 16
+  },
+  {
+    "id": 17,
+    "name": "ระบบจุดระเบิดและชาร์จไฟ",
+    "name_en": "Ignition & Charging",
+    "description": "รหัสอ้างอิง: SUB012",
+    "icon": "🔋",
+    "parent_id": 4,
+    "is_active": true,
+    "sort_order": 17
+  },
+  {
+    "id": 18,
+    "name": "ชิ้นส่วนเครื่องยนต์",
+    "name_en": "Engine Components",
+    "description": "รหัสอ้างอิง: SUB013",
+    "icon": "🔥",
+    "parent_id": 4,
+    "is_active": true,
+    "sort_order": 18
+  },
+  {
+    "id": 19,
+    "name": "สายควบคุม",
+    "name_en": "Control Cables",
+    "description": "รหัสอ้างอิง: SUB014",
+    "icon": "🐍",
+    "parent_id": 4,
+    "is_active": true,
+    "sort_order": 19
+  },
+  {
+    "id": 20,
+    "name": "ชิ้นส่วนภายนอก",
+    "name_en": "Exterior Body Parts",
+    "description": "รหัสอ้างอิง: SUB015",
+    "icon": "🛡️",
+    "parent_id": 5,
+    "is_active": true,
+    "sort_order": 20
+  },
+  {
+    "id": 21,
+    "name": "มือจับและอุปกรณ์ควบคุม",
+    "name_en": "Handlebar & Controls",
+    "description": "รหัสอ้างอิง: SUB016",
+    "icon": "🕹️",
+    "parent_id": 5,
+    "is_active": true,
+    "sort_order": 21
+  },
+  {
+    "id": 22,
+    "name": "พักเท้าและขาตั้ง",
+    "name_en": "Footrests & Stands",
+    "description": "รหัสอ้างอิง: SUB017",
+    "icon": "🦶",
+    "parent_id": 5,
+    "is_active": true,
+    "sort_order": 22
+  },
+  {
+    "id": 23,
+    "name": "น็อตและกิ๊บล็อก",
+    "name_en": "Bolts & Fasteners",
+    "description": "รหัสอ้างอิง: SUB018",
+    "icon": "🔩",
+    "parent_id": 5,
+    "is_active": true,
+    "sort_order": 23
+  },
+  {
+    "id": 24,
+    "name": "อุปกรณ์ตกแต่ง",
+    "name_en": "Accessories",
+    "description": "รหัสอ้างอิง: SUB019",
+    "icon": "✨",
+    "parent_id": 5,
+    "is_active": true,
+    "sort_order": 24
+  },
+  {
+    "id": 25,
+    "name": "น้ำมันเครื่อง 4 จังหวะ",
+    "name_en": "4T Engine Oil",
+    "description": "รหัสอ้างอิง: PT001",
+    "icon": "🛢️",
+    "parent_id": 6,
+    "is_active": true,
+    "sort_order": 25
+  },
+  {
+    "id": 26,
+    "name": "น้ำมันเครื่อง 2 จังหวะ",
+    "name_en": "2T Engine Oil",
+    "description": "รหัสอ้างอิง: PT002",
+    "icon": "🛢️",
+    "parent_id": 6,
+    "is_active": true,
+    "sort_order": 26
+  },
+  {
+    "id": 27,
+    "name": "น้ำมันเฟืองท้าย",
+    "name_en": "Gear Oil",
+    "description": "รหัสอ้างอิง: PT003",
+    "icon": "🛢️",
+    "parent_id": 6,
+    "is_active": true,
+    "sort_order": 27
+  },
+  {
+    "id": 28,
+    "name": "น้ำมันเบรก",
+    "name_en": "Brake Fluid",
+    "description": "รหัสอ้างอิง: PT004",
+    "icon": "🧴",
+    "parent_id": 6,
+    "is_active": true,
+    "sort_order": 28
+  },
+  {
+    "id": 29,
+    "name": "น้ำยาหล่อเย็น",
+    "name_en": "Coolant",
+    "description": "รหัสอ้างอิง: PT005",
+    "icon": "🧊",
+    "parent_id": 6,
+    "is_active": true,
+    "sort_order": 29
+  },
+  {
+    "id": 30,
+    "name": "หัวเทียน",
+    "name_en": "Spark Plug",
+    "description": "รหัสอ้างอิง: PT006",
+    "icon": "🔌",
+    "parent_id": 7,
+    "is_active": true,
+    "sort_order": 30
+  },
+  {
+    "id": 31,
+    "name": "แบตเตอรี่",
+    "name_en": "Battery",
+    "description": "รหัสอ้างอิง: PT007",
+    "icon": "🔋",
+    "parent_id": 7,
+    "is_active": true,
+    "sort_order": 31
+  },
+  {
+    "id": 32,
+    "name": "หลอดไฟหน้า",
+    "name_en": "Headlight Bulb",
+    "description": "รหัสอ้างอิง: PT008",
+    "icon": "💡",
+    "parent_id": 7,
+    "is_active": true,
+    "sort_order": 32
+  },
+  {
+    "id": 33,
+    "name": "หลอดไฟท้าย",
+    "name_en": "Tail Light Bulb",
+    "description": "รหัสอ้างอิง: PT009",
+    "icon": "🚨",
+    "parent_id": 7,
+    "is_active": true,
+    "sort_order": 33
+  },
+  {
+    "id": 34,
+    "name": "หลอดไฟเลี้ยว",
+    "name_en": "Turn Signal Bulb",
+    "description": "รหัสอ้างอิง: PT010",
+    "icon": "↔️",
+    "parent_id": 7,
+    "is_active": true,
+    "sort_order": 34
+  },
+  {
+    "id": 35,
+    "name": "ฟิวส์",
+    "name_en": "Fuse",
+    "description": "รหัสอ้างอิง: PT011",
+    "icon": "🔌",
+    "parent_id": 7,
+    "is_active": true,
+    "sort_order": 35
+  },
+  {
+    "id": 36,
+    "name": "กรองอากาศ",
+    "name_en": "Air Filter",
+    "description": "รหัสอ้างอิง: PT012",
+    "icon": "🌪️",
+    "parent_id": 8,
+    "is_active": true,
+    "sort_order": 36
+  },
+  {
+    "id": 37,
+    "name": "กรองน้ำมันเครื่อง",
+    "name_en": "Oil Filter",
+    "description": "รหัสอ้างอิง: PT013",
+    "icon": "🛢️",
+    "parent_id": 8,
+    "is_active": true,
+    "sort_order": 37
+  },
+  {
+    "id": 38,
+    "name": "กรองน้ำมันเชื้อเพลิง",
+    "name_en": "Fuel Filter",
+    "description": "รหัสอ้างอิง: PT014",
+    "icon": "⛽",
+    "parent_id": 8,
+    "is_active": true,
+    "sort_order": 38
+  },
+  {
+    "id": 39,
+    "name": "ผ้าเบรกหน้า",
+    "name_en": "Front Brake Pad",
+    "description": "รหัสอ้างอิง: PT015",
+    "icon": "🛑",
+    "parent_id": 9,
+    "is_active": true,
+    "sort_order": 39
+  },
+  {
+    "id": 40,
+    "name": "ผ้าเบรกหลัง",
+    "name_en": "Rear Brake Pad",
+    "description": "รหัสอ้างอิง: PT016",
+    "icon": "🛑",
+    "parent_id": 9,
+    "is_active": true,
+    "sort_order": 40
+  },
+  {
+    "id": 41,
+    "name": "ก้ามเบรก",
+    "name_en": "Brake Shoe",
+    "description": "รหัสอ้างอิง: PT017",
+    "icon": "🛑",
+    "parent_id": 9,
+    "is_active": true,
+    "sort_order": 41
+  },
+  {
+    "id": 42,
+    "name": "สายเบรก",
+    "name_en": "Brake Cable",
+    "description": "รหัสอ้างอิง: PT018",
+    "icon": "🐍",
+    "parent_id": 9,
+    "is_active": true,
+    "sort_order": 42
+  },
+  {
+    "id": 43,
+    "name": "โซ่",
+    "name_en": "Drive Chain",
+    "description": "รหัสอ้างอิง: PT019",
+    "icon": "🔗",
+    "parent_id": 10,
+    "is_active": true,
+    "sort_order": 43
+  },
+  {
+    "id": 44,
+    "name": "สเตอร์หน้า",
+    "name_en": "Front Sprocket",
+    "description": "รหัสอ้างอิง: PT020",
+    "icon": "⚙️",
+    "parent_id": 10,
+    "is_active": true,
+    "sort_order": 44
+  },
+  {
+    "id": 45,
+    "name": "สเตอร์หลัง",
+    "name_en": "Rear Sprocket",
+    "description": "รหัสอ้างอิง: PT021",
+    "icon": "⚙️",
+    "parent_id": 10,
+    "is_active": true,
+    "sort_order": 45
+  },
+  {
+    "id": 46,
+    "name": "สายพานขับเคลื่อน",
+    "name_en": "Drive Belt",
+    "description": "รหัสอ้างอิง: PT023",
+    "icon": "〰️",
+    "parent_id": 11,
+    "is_active": true,
+    "sort_order": 46
+  },
+  {
+    "id": 47,
+    "name": "เม็ดตุ้ม",
+    "name_en": "Roller Weight",
+    "description": "รหัสอ้างอิง: PT024",
+    "icon": "🔘",
+    "parent_id": 11,
+    "is_active": true,
+    "sort_order": 47
+  },
+  {
+    "id": 48,
+    "name": "ชามขับหน้า",
+    "name_en": "Front Drive Pulley",
+    "description": "รหัสอ้างอิง: PT025",
+    "icon": "💿",
+    "parent_id": 11,
+    "is_active": true,
+    "sort_order": 48
+  },
+  {
+    "id": 49,
+    "name": "ผ้าคลัตช์ก้อน",
+    "name_en": "Clutch Shoe",
+    "description": "รหัสอ้างอิง: PT026",
+    "icon": "🧲",
+    "parent_id": 11,
+    "is_active": true,
+    "sort_order": 49
+  },
+  {
+    "id": 50,
+    "name": "โช้คอัพหลัง",
+    "name_en": "Rear Shock Absorber",
+    "description": "รหัสอ้างอิง: PT027",
+    "icon": "➿",
+    "parent_id": 12,
+    "is_active": true,
+    "sort_order": 50
+  },
+  {
+    "id": 51,
+    "name": "ซีลโช้คหน้า",
+    "name_en": "Front Fork Seal",
+    "description": "รหัสอ้างอิง: PT028",
+    "icon": "⭕",
+    "parent_id": 12,
+    "is_active": true,
+    "sort_order": 51
+  },
+  {
+    "id": 52,
+    "name": "น้ำมันโช้ค",
+    "name_en": "Fork Oil",
+    "description": "รหัสอ้างอิง: PT029",
+    "icon": "🛢️",
+    "parent_id": 12,
+    "is_active": true,
+    "sort_order": 52
+  },
+  {
+    "id": 53,
+    "name": "สปริงโช้ค",
+    "name_en": "Shock Spring",
+    "description": "รหัสอ้างอิง: PT030",
+    "icon": "〰️",
+    "parent_id": 12,
+    "is_active": true,
+    "sort_order": 53
+  },
+  {
+    "id": 54,
+    "name": "ลูกปืนล้อ",
+    "name_en": "Wheel Bearing",
+    "description": "รหัสอ้างอิง: PT031",
+    "icon": "🛞",
+    "parent_id": 13,
+    "is_active": true,
+    "sort_order": 54
+  },
+  {
+    "id": 55,
+    "name": "ลูกปืนคอ",
+    "name_en": "Steering Bearing",
+    "description": "รหัสอ้างอิง: PT032",
+    "icon": "🛞",
+    "parent_id": 13,
+    "is_active": true,
+    "sort_order": 55
+  },
+  {
+    "id": 56,
+    "name": "บูชตะเกียบหลัง",
+    "name_en": "Swingarm Bushing",
+    "description": "รหัสอ้างอิง: PT033",
+    "icon": "🔘",
+    "parent_id": 13,
+    "is_active": true,
+    "sort_order": 56
+  },
+  {
+    "id": 57,
+    "name": "ยางนอกแบบมียางใน",
+    "name_en": "Tube-Type Tire",
+    "description": "รหัสอ้างอิง: PT034",
+    "icon": "🍩",
+    "parent_id": 14,
+    "is_active": true,
+    "sort_order": 57
+  },
+  {
+    "id": 58,
+    "name": "ยางนอกแบบไม่มียางใน",
+    "name_en": "Tubeless Tire",
+    "description": "รหัสอ้างอิง: PT035",
+    "icon": "🍩",
+    "parent_id": 14,
+    "is_active": true,
+    "sort_order": 58
+  },
+  {
+    "id": 59,
+    "name": "ยางใน",
+    "name_en": "Inner Tube",
+    "description": "รหัสอ้างอิง: PT036",
+    "icon": "🎈",
+    "parent_id": 14,
+    "is_active": true,
+    "sort_order": 59
+  },
+  {
+    "id": 60,
+    "name": "ซี่ลวด",
+    "name_en": "Wheel Spoke",
+    "description": "รหัสอ้างอิง: PT037",
+    "icon": "🥢",
+    "parent_id": 15,
+    "is_active": true,
+    "sort_order": 60
+  },
+  {
+    "id": 61,
+    "name": "วาล์วลม",
+    "name_en": "Tire Valve",
+    "description": "รหัสอ้างอิง: PT038",
+    "icon": "📍",
+    "parent_id": 15,
+    "is_active": true,
+    "sort_order": 61
+  },
+  {
+    "id": 62,
+    "name": "ยางรองขอบล้อ",
+    "name_en": "Rim Tape",
+    "description": "รหัสอ้างอิง: PT039",
+    "icon": "🎀",
+    "parent_id": 15,
+    "is_active": true,
+    "sort_order": 62
+  },
+  {
+    "id": 63,
+    "name": "กล่อง CDI",
+    "name_en": "CDI Unit",
+    "description": "รหัสอ้างอิง: PT040",
+    "icon": "⬛",
+    "parent_id": 16,
+    "is_active": true,
+    "sort_order": 63
+  },
+  {
+    "id": 64,
+    "name": "กล่อง ECU",
+    "name_en": "ECU Unit",
+    "description": "รหัสอ้างอิง: PT041",
+    "icon": "💻",
+    "parent_id": 16,
+    "is_active": true,
+    "sort_order": 64
+  },
+  {
+    "id": 65,
+    "name": "สวิตช์กุญแจ",
+    "name_en": "Ignition Switch",
+    "description": "รหัสอ้างอิง: PT042",
+    "icon": "🔑",
+    "parent_id": 16,
+    "is_active": true,
+    "sort_order": 65
+  },
+  {
+    "id": 66,
+    "name": "สวิตช์แฮนด์",
+    "name_en": "Handlebar Switch",
+    "description": "รหัสอ้างอิง: PT043",
+    "icon": "🕹️",
+    "parent_id": 16,
+    "is_active": true,
+    "sort_order": 66
+  },
+  {
+    "id": 67,
+    "name": "แผ่นชาร์จ",
+    "name_en": "Regulator Rectifier",
+    "description": "รหัสอ้างอิง: PT044",
+    "icon": "🔋",
+    "parent_id": 17,
+    "is_active": true,
+    "sort_order": 67
+  },
+  {
+    "id": 68,
+    "name": "คอยล์จุดระเบิด",
+    "name_en": "Ignition Coil",
+    "description": "รหัสอ้างอิง: PT045",
+    "icon": "⚡",
+    "parent_id": 17,
+    "is_active": true,
+    "sort_order": 68
+  },
+  {
+    "id": 69,
+    "name": "มัดไฟ",
+    "name_en": "Stator Coil",
+    "description": "รหัสอ้างอิง: PT046",
+    "icon": "🧶",
+    "parent_id": 17,
+    "is_active": true,
+    "sort_order": 69
+  },
+  {
+    "id": 70,
+    "name": "ชุดลูกสูบและแหวน",
+    "name_en": "Piston & Ring Set",
+    "description": "รหัสอ้างอิง: PT047",
+    "icon": "🛢️",
+    "parent_id": 18,
+    "is_active": true,
+    "sort_order": 70
+  },
+  {
+    "id": 71,
+    "name": "ปะเก็นชุดใหญ่",
+    "name_en": "Full Gasket Set",
+    "description": "รหัสอ้างอิง: PT048",
+    "icon": "📄",
+    "parent_id": 18,
+    "is_active": true,
+    "sort_order": 71
+  },
+  {
+    "id": 72,
+    "name": "ปะเก็นชุดเล็ก",
+    "name_en": "Top Gasket Set",
+    "description": "รหัสอ้างอิง: PT049",
+    "icon": "📄",
+    "parent_id": 18,
+    "is_active": true,
+    "sort_order": 72
+  },
+  {
+    "id": 73,
+    "name": "วาล์วไอดี",
+    "name_en": "Intake Valve",
+    "description": "รหัสอ้างอิง: PT050",
+    "icon": "🍄",
+    "parent_id": 18,
+    "is_active": true,
+    "sort_order": 73
+  },
+  {
+    "id": 74,
+    "name": "วาล์วไอเสีย",
+    "name_en": "Exhaust Valve",
+    "description": "รหัสอ้างอิง: PT051",
+    "icon": "🍄",
+    "parent_id": 18,
+    "is_active": true,
+    "sort_order": 74
+  },
+  {
+    "id": 75,
+    "name": "ซีลเครื่องยนต์",
+    "name_en": "Engine Oil Seal",
+    "description": "รหัสอ้างอิง: PT052",
+    "icon": "⭕",
+    "parent_id": 18,
+    "is_active": true,
+    "sort_order": 75
+  },
+  {
+    "id": 76,
+    "name": "สายเร่ง",
+    "name_en": "Throttle Cable",
+    "description": "รหัสอ้างอิง: PT053",
+    "icon": "🐍",
+    "parent_id": 19,
+    "is_active": true,
+    "sort_order": 76
+  },
+  {
+    "id": 77,
+    "name": "สายไมล์",
+    "name_en": "Speedometer Cable",
+    "description": "รหัสอ้างอิง: PT054",
+    "icon": "🐍",
+    "parent_id": 19,
+    "is_active": true,
+    "sort_order": 77
+  },
+  {
+    "id": 78,
+    "name": "สายคลัตช์",
+    "name_en": "Clutch Cable",
+    "description": "รหัสอ้างอิง: PT055",
+    "icon": "🐍",
+    "parent_id": 19,
+    "is_active": true,
+    "sort_order": 78
+  },
+  {
+    "id": 79,
+    "name": "กระจกมองข้าง",
+    "name_en": "Side Mirror",
+    "description": "รหัสอ้างอิง: PT056",
+    "icon": "🪞",
+    "parent_id": 20,
+    "is_active": true,
+    "sort_order": 79
+  },
+  {
+    "id": 80,
+    "name": "บังโคลน",
+    "name_en": "Fender",
+    "description": "รหัสอ้างอิง: PT057",
+    "icon": "🛡️",
+    "parent_id": 20,
+    "is_active": true,
+    "sort_order": 80
+  },
+  {
+    "id": 81,
+    "name": "หน้ากากรถ",
+    "name_en": "Front Cover",
+    "description": "รหัสอ้างอิง: PT058",
+    "icon": "🎭",
+    "parent_id": 20,
+    "is_active": true,
+    "sort_order": 81
+  },
+  {
+    "id": 82,
+    "name": "ฝาครอบข้าง",
+    "name_en": "Side Cover",
+    "description": "รหัสอ้างอิง: PT059",
+    "icon": "🛡️",
+    "parent_id": 20,
+    "is_active": true,
+    "sort_order": 82
+  },
+  {
+    "id": 83,
+    "name": "มือเบรก",
+    "name_en": "Brake Lever",
+    "description": "รหัสอ้างอิง: PT060",
+    "icon": "🕹️",
+    "parent_id": 21,
+    "is_active": true,
+    "sort_order": 83
+  },
+  {
+    "id": 84,
+    "name": "มือคลัตช์",
+    "name_en": "Clutch Lever",
+    "description": "รหัสอ้างอิง: PT061",
+    "icon": "🕹️",
+    "parent_id": 21,
+    "is_active": true,
+    "sort_order": 84
+  },
+  {
+    "id": 85,
+    "name": "ปลอกแฮนด์",
+    "name_en": "Handle Grip",
+    "description": "รหัสอ้างอิง: PT062",
+    "icon": "✊",
+    "parent_id": 21,
+    "is_active": true,
+    "sort_order": 85
+  },
+  {
+    "id": 86,
+    "name": "พักเท้าหน้า",
+    "name_en": "Front Footrest",
+    "description": "รหัสอ้างอิง: PT063",
+    "icon": "🦶",
+    "parent_id": 22,
+    "is_active": true,
+    "sort_order": 86
+  },
+  {
+    "id": 87,
+    "name": "พักเท้าหลัง",
+    "name_en": "Rear Footrest",
+    "description": "รหัสอ้างอิง: PT064",
+    "icon": "🦶",
+    "parent_id": 22,
+    "is_active": true,
+    "sort_order": 87
+  },
+  {
+    "id": 88,
+    "name": "ขาตั้งกลาง",
+    "name_en": "Center Stand",
+    "description": "รหัสอ้างอิง: PT065",
+    "icon": "🏗️",
+    "parent_id": 22,
+    "is_active": true,
+    "sort_order": 88
+  },
+  {
+    "id": 89,
+    "name": "ขาตั้งข้าง",
+    "name_en": "Side Stand",
+    "description": "รหัสอ้างอิง: PT066",
+    "icon": "🦵",
+    "parent_id": 22,
+    "is_active": true,
+    "sort_order": 89
+  },
+  {
+    "id": 90,
+    "name": "น็อต",
+    "name_en": "Bolt",
+    "description": "รหัสอ้างอิง: PT067",
+    "icon": "🔩",
+    "parent_id": 23,
+    "is_active": true,
+    "sort_order": 90
+  },
+  {
+    "id": 91,
+    "name": "สกรู",
+    "name_en": "Screw",
+    "description": "รหัสอ้างอิง: PT068",
+    "icon": "🔩",
+    "parent_id": 23,
+    "is_active": true,
+    "sort_order": 91
+  },
+  {
+    "id": 92,
+    "name": "แหวนรอง",
+    "name_en": "Washer",
+    "description": "รหัสอ้างอิง: PT069",
+    "icon": "💍",
+    "parent_id": 23,
+    "is_active": true,
+    "sort_order": 92
+  },
+  {
+    "id": 93,
+    "name": "กิ๊บล็อก",
+    "name_en": "Retaining Clip",
+    "description": "รหัสอ้างอิง: PT070",
+    "icon": "📎",
+    "parent_id": 23,
+    "is_active": true,
+    "sort_order": 93
+  },
+  {
+    "id": 94,
+    "name": "ตะแกรงท้าย",
+    "name_en": "Rear Rack",
+    "description": "รหัสอ้างอิง: PT071",
+    "icon": "🛒",
+    "parent_id": 24,
+    "is_active": true,
+    "sort_order": 94
+  },
+  {
+    "id": 95,
+    "name": "กล่องท้าย",
+    "name_en": "Top Box",
+    "description": "รหัสอ้างอิง: PT072",
+    "icon": "📦",
+    "parent_id": 24,
+    "is_active": true,
+    "sort_order": 95
+  },
+  {
+    "id": 96,
+    "name": "กันล้ม",
+    "name_en": "Crash Bar",
+    "description": "รหัสอ้างอิง: PT073",
+    "icon": "🚧",
+    "parent_id": 24,
+    "is_active": true,
+    "sort_order": 96
+  }
+]

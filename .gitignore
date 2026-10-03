@@ -1,0 +1,24 @@
+# Python / Backend
+.venv/
+__pycache__/
+*.pyc
+.env
+backend/.env
+
+# Node.js / Frontend
+node_modules/
+frontend/node_modules/
+.next/
+frontend/.next/
+out/
+build/
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# VS Code / IDE
+.vscode/
+.idea/
+

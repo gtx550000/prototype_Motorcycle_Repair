@@ -1,0 +1,90 @@
+[
+  {
+    "id": 401,
+    "category_id": 4,
+    "name": "โช้คอัพหน้า (แกนโช้คคู่)",
+    "name_en": "Front Fork Shock Absorber (Pair)",
+    "part_number": "SUS-SHK-F01",
+    "price": 1450.00,
+    "stock_quantity": 10,
+    "unit": "คู่",
+    "description": "ชุดกระบอกและแกนโช้คหน้าคู่ ชุบฮาร์ดโครเมียม ซับแรงกระแทกนุ่มนวล ทรงตัวนิ่งบนทุกสภาพถนน"
+  },
+  {
+    "id": 402,
+    "category_id": 4,
+    "name": "โช้คอัพหลัง สปริงแก๊ส",
+    "name_en": "Rear Gas Shock Absorbers (Pair)",
+    "part_number": "SUS-SHK-R02",
+    "price": 1250.00,
+    "stock_quantity": 14,
+    "unit": "คู่",
+    "description": "โช้คหลังคู่แบบมีกระบอกซับแทงค์แก๊สไนโตรเจน ปรับพรีโหลดสปริงได้ รองรับน้ำหนักบรรทุกและซับแรงได้ดีเยี่ยม"
+  },
+  {
+    "id": 403,
+    "category_id": 4,
+    "name": "ผ้าเบรกหน้า (ดิสก์เบรก)",
+    "name_en": "Front Disc Brake Pads",
+    "part_number": "BRK-PAD-F01",
+    "price": 160.00,
+    "stock_quantity": 45,
+    "unit": "ชุด",
+    "description": "ผ้าดิสก์เบรกหน้าเนื้อเซรามิกผสมคาร์บอน เบรกนุ่มหนึบ ไม่กินจานเบรก ไม่มีเสียงดังรบกวน"
+  },
+  {
+    "id": 404,
+    "category_id": 4,
+    "name": "ผ้าเบรกหลัง (ดรัมเบรก)",
+    "name_en": "Rear Drum Brake Shoes",
+    "part_number": "BRK-SHU-R02",
+    "price": 130.00,
+    "stock_quantity": 50,
+    "unit": "ชุด",
+    "description": "ก้ามเบรกหลังพร้อมสปริง ผ้าเบรกไร้ใยหิน (Non-Asbestos) ปลอดภัย ทนความร้อนสูง ระยะเบรกสั้น"
+  },
+  {
+    "id": 405,
+    "category_id": 4,
+    "name": "จานเบรกหน้า สแตนเลส",
+    "name_en": "Front Brake Disc Rotor 220mm",
+    "part_number": "BRK-DSC-F01",
+    "price": 420.00,
+    "stock_quantity": 20,
+    "unit": "ใบ",
+    "description": "จานดิสก์เบรกหน้าขนาด 220 มม. สแตนเลสสตีลเกรดสูง มีรูระบายความร้อน ระบายความร้อนและน้ำได้อย่างรวดเร็ว"
+  },
+  {
+    "id": 406,
+    "category_id": 4,
+    "name": "จานเบรกหลัง สแตนเลส",
+    "name_en": "Rear Brake Disc Rotor 190mm",
+    "part_number": "BRK-DSC-R02",
+    "price": 380.00,
+    "stock_quantity": 18,
+    "unit": "ใบ",
+    "description": "จานดิสก์เบรกหลังขนาด 190 มม. แข็งแรงทนทาน ทนต่อแรงเสียดทาน ไม่บิดงอง่ายเมื่อเจอความร้อนสูง"
+  },
+  {
+    "id": 407,
+    "category_id": 4,
+    "name": "ยางนอกหน้า ลายสายฟ้า 70/90-17",
+    "name_en": "Front Motorcycle Tire 70/90-17",
+    "part_number": "TYR-FRT-7090",
+    "price": 480.00,
+    "stock_quantity": 25,
+    "unit": "เส้น",
+    "description": "ยางนอกล้อหน้าขนาด 70/90-17 แบบใช้ยางใน ลายดอกยางรีดน้ำดีเยี่ยม ยึดเกาะถนนแห้งและเปียกได้อย่างมั่นใจ"
+  },
+  {
+    "id": 408,
+    "category_id": 4,
+    "name": "ยางนอกหลัง ลายสายฟ้า 80/90-17",
+    "name_en": "Rear Motorcycle Tire 80/90-17",
+    "part_number": "TYR-RR-8090",
+    "price": 560.00,
+    "stock_quantity": 25,
+    "unit": "เส้น",
+    "description": "ยางนอกล้อหลังขนาด 80/90-17 หน้ายางกว้าง ทรงตัวนิ่ง เข้าโค้งแม่นยำ ทนทานต่อการสึกหรอ"
+  }
+]

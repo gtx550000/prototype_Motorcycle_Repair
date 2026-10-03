@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password": "admin123",
+    "full_name": "เจ้าของร้าน",
+    "email": "admin@motorcycleshop.com",
+    "role": "owner",
+    "is_active": true,
+    "created_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": 2,
+    "username": "staff01",
+    "password": "staff123",
+    "full_name": "พนักงาน ทดสอบ",
+    "email": "staff01@motorcycleshop.com",
+    "role": "employee",
+    "is_active": true,
+    "created_at": "2026-01-01T00:00:00Z"
+  }
+]

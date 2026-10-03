@@ -1,0 +1,90 @@
+[
+  {
+    "id": 501,
+    "category_id": 5,
+    "name": "น้ำมันเครื่อง 4T สังเคราะห์แท้ 10W-40 (0.8L)",
+    "name_en": "Fully Synthetic 4T Engine Oil 10W-40 (0.8L)",
+    "part_number": "CSM-OIL-4T08",
+    "price": 180.00,
+    "stock_quantity": 60,
+    "unit": "ขวด",
+    "description": "น้ำมันเครื่องสังเคราะห์แท้ 100% มาตรฐาน JASO MA2 / API SN ปกป้องเครื่องยนต์และคลัตช์ในทุกรอบความเร็ว"
+  },
+  {
+    "id": 502,
+    "category_id": 5,
+    "name": "ไส้กรองอากาศแห้ง",
+    "name_en": "OEM Air Filter Element",
+    "part_number": "CSM-FLT-AIR01",
+    "price": 120.00,
+    "stock_quantity": 40,
+    "unit": "ชิ้น",
+    "description": "แผ่นกรองอากาศกระดาษเคลือบพิเศษ ดักจับฝุ่นละอองและสิ่งสกปรกได้ถึง 99% ช่วยให้อากาศไหลผ่านสะดวก"
+  },
+  {
+    "id": 503,
+    "category_id": 5,
+    "name": "หัวเทียนเข็มอิริเดียม",
+    "name_en": "Iridium Spark Plug CPR8EAIX-9",
+    "part_number": "CSM-PLG-IRI01",
+    "price": 280.00,
+    "stock_quantity": 50,
+    "unit": "หัว",
+    "description": "หัวเทียนแกนอิริเดียมปลายแหลม จุดระเบิดแม่นยำ เผาไหม้หมดจด เพิ่มอัตราเร่ง ประหยัดน้ำมันเชื้อเพลิง"
+  },
+  {
+    "id": 504,
+    "category_id": 5,
+    "name": "น้ำมันเบรกสังเคราะห์ DOT 4 (0.5L)",
+    "name_en": "Synthetic Brake Fluid DOT 4 (500ml)",
+    "part_number": "CSM-BRK-DOT4",
+    "price": 135.00,
+    "stock_quantity": 30,
+    "unit": "ขวด",
+    "description": "น้ำมันเบรกเกรดสังเคราะห์ จุดเดือดสูง ป้องกันการเกิดฟองไอในระบบไฮดรอลิก ไม่กัดกร่อนซีลยาง"
+  },
+  {
+    "id": 505,
+    "category_id": 5,
+    "name": "น้ำมันเกียร์ออโตเมติก / เฟืองท้าย (120ml)",
+    "name_en": "Scooter Final Gear Oil 80W-90 (120ml)",
+    "part_number": "CSM-OIL-GR12",
+    "price": 55.00,
+    "stock_quantity": 70,
+    "unit": "หลอด",
+    "description": "น้ำมันเฟืองท้ายสำหรับรถมอเตอร์ไซค์เกียร์ออโตเมติก หล่อลื่นชุดเฟืองท้าย ลดแรงเสียดทานและเสียงหอน"
+  },
+  {
+    "id": 506,
+    "category_id": 5,
+    "name": "สายพานขับเคลื่อน V-Belt",
+    "name_en": "CVT Transmission Drive Belt",
+    "part_number": "CSM-BLT-CVT01",
+    "price": 420.00,
+    "stock_quantity": 25,
+    "unit": "เส้น",
+    "description": "สายพานส่งกำลัง CVT ผลิตจากเส้นใยเคฟลาร์และยางสังเคราะห์ ทนแรงดึงสูง ทนความร้อน ไม่ยืดหรือลื่นไถล"
+  },
+  {
+    "id": 507,
+    "category_id": 5,
+    "name": "ไส้กรองน้ำมันเครื่อง",
+    "name_en": "Engine Oil Filter Element",
+    "part_number": "CSM-FLT-OIL02",
+    "price": 85.00,
+    "stock_quantity": 45,
+    "unit": "ลูก",
+    "description": "กรองน้ำมันเครื่องดักจับเศษโลหะและคราบเขม่า รักษาความสะอาดของน้ำมันเครื่อง ปกป้องชิ้นส่วนภายในเครื่องยนต์"
+  },
+  {
+    "id": 508,
+    "category_id": 5,
+    "name": "น้ำยาหล่อเย็นหม้อน้ำ พร้อมใช้ (0.5L)",
+    "name_en": "Pre-mixed Long Life Coolant (500ml)",
+    "part_number": "CSM-CLN-500M",
+    "price": 95.00,
+    "stock_quantity": 35,
+    "unit": "ขวด",
+    "description": "น้ำยาหล่อเย็นผสมเสร็จสูตร Long Life สีเขียวสะท้อนแสง ป้องกันสนิม ตะกรัน และการกัดกร่อนในหม้อน้ำ"
+  }
+]
