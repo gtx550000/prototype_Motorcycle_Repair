@@ -7,6 +7,7 @@ export interface Category {
   parent_id?: number;
   is_active: boolean;
   sort_order: number;
+  price: number;
   created_by: number;
   created_at: string;
   updated_at: string;
@@ -20,6 +21,7 @@ export interface CategoryFormData {
   parent_id?: number;
   is_active: boolean;
   sort_order: number;
+  price: number;
 }
 
 export interface CategoryListResponse {

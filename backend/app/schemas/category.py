@@ -10,6 +10,7 @@ class CategoryBase(BaseModel):
     parent_id: Optional[int] = None
     is_active: bool = True
     sort_order: int = 0
+    price: float = 0.0
 
 class CategoryCreate(CategoryBase):
     pass
@@ -22,6 +23,7 @@ class CategoryUpdate(BaseModel):
     parent_id: Optional[int] = None
     is_active: Optional[bool] = None
     sort_order: Optional[int] = None
+    price: Optional[float] = None
 
 class CategoryResponse(CategoryBase):
     id: int

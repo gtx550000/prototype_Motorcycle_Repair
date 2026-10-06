@@ -21,6 +21,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ isOpen, onClose, onS
     icon: '🔧',
     is_active: true,
     sort_order: 1,
+    price: 0,
   });
   const [loading, setLoading] = useState(false);
 
@@ -34,6 +35,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ isOpen, onClose, onS
         parent_id: initialData.parent_id,
         is_active: initialData.is_active,
         sort_order: initialData.sort_order || 1,
+        price: initialData.price ?? 0,
       });
     }
   }, [initialData]);

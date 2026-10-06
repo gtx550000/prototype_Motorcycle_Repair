@@ -96,7 +96,7 @@ export default function POSPage() {
           name: cat.name,
           name_en: cat.name_en,
           icon: cat.icon,
-          price: 0, // ยังไม่มีราคาในระบบ ใช้ 0 เป็นค่าเริ่มต้น
+          price: cat.price ?? 0, // ดึงราคาจริงจาก API
           qty: 1,
         },
       ];
@@ -240,6 +240,15 @@ export default function POSPage() {
                       {item.is_active ? '● พร้อมขาย' : '● ปิดการขาย'}
                     </span>
                   </div>
+                  {/* แสดงราคา */}
+                  <div className="mt-2 text-right">
+                    <span className="text-base font-bold text-slate-800">
+                      {item.price > 0
+                        ? `฿${Number(item.price).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                        : <span className="text-xs text-slate-400 font-normal">ยังไม่มีราคา</span>
+                      }
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -270,12 +279,12 @@ export default function POSPage() {
                 <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
                   {cart.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm items-center">
-                      <div className="flex flex-col flex-1 min-w-0">
+                    <div className="flex flex-col flex-1 min-w-0">
                         <span className="truncate font-medium">
                           {item.icon} {item.name}
                         </span>
                         <span className="text-xs text-slate-400">
-                          {item.qty} x ฿{item.price.toLocaleString()}
+                          {item.qty} x ฿{Number(item.price).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 ml-3">
@@ -287,7 +296,7 @@ export default function POSPage() {
                         </button>
                         <span className="w-6 text-center font-medium">{item.qty}</span>
                         <button
-                          onClick={() => addToCart({ id: item.id, name: item.name, icon: item.icon } as Category)}
+                          onClick={() => addToCart({ id: item.id, name: item.name, icon: item.icon, price: item.price } as Category)}
                           className="w-6 h-6 flex items-center justify-center rounded bg-slate-100 hover:bg-slate-200"
                         >
                           <Plus className="w-3 h-3" />
