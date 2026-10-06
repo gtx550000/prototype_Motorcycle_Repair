@@ -37,8 +37,18 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ isOpen, onClose, onS
         sort_order: initialData.sort_order || 1,
         price: initialData.price ?? 0,
       });
+    } else {
+      setFormData({
+        name: '',
+        name_en: '',
+        description: '',
+        icon: '🔧',
+        is_active: true,
+        sort_order: 1,
+        price: 0,
+      });
     }
-  }, [initialData]);
+  }, [initialData, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,6 +90,22 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ isOpen, onClose, onS
           value={formData.icon} 
           onChange={(e) => setFormData({...formData, icon: e.target.value})} 
         />
+
+        {/* ราคาสินค้า */}
+        <div className="flex flex-col gap-1 mb-4">
+          <label className="text-sm font-medium text-gray-700">ราคา (บาท)</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">฿</span>
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              className="w-full rounded-md border border-gray-300 pl-7 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary-500 outline-none"
+              value={formData.price}
+              onChange={(e) => setFormData({...formData, price: parseFloat(e.target.value) || 0})}
+            />
+          </div>
+        </div>
 
         <div className="flex flex-col gap-1 mb-4">
           <label className="text-sm font-medium text-gray-700">หมวดหมู่หลัก (ไม่บังคับ)</label>
