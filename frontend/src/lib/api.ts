@@ -48,4 +48,36 @@ export const categoryAPI = {
   deleteCategory: (id: number) => api.delete(`/api/categories/${id}`),
 };
 
+export const employeeAPI = {
+  // ดึงรายชื่อลูกจ้างพร้อม wage + สถิติวันที่ (owner only)
+  getEmployeesWithWage: (targetDate?: string) =>
+    api.get('/api/employees/', { params: targetDate ? { target_date: targetDate } : {} }),
+  // dropdown สำหรับ payment (ทุกคน)
+  getEmployeeList: () => api.get('/api/employees/list'),
+  // ตั้งค่าค่าแรง (owner only)
+  setWage: (userId: number, data: { daily_wage: number; note?: string }) =>
+    api.put(`/api/employees/${userId}/wage`, data),
+  // แก้ไขข้อมูลลูกจ้าง (owner only)
+  updateEmployee: (userId: number, data: {
+    full_name?: string;
+    username?: string;
+    password?: string;
+    is_active?: boolean;
+    daily_wage?: number;
+    wage_note?: string;
+  }) => api.put(`/api/employees/${userId}`, data),
+  // ลบลูกจ้าง (owner only)
+  deleteEmployee: (userId: number) => api.delete(`/api/employees/${userId}`),
+  // บันทึกการขาย
+  recordSale: (data: any) => api.post('/api/employees/sales', data),
+  // ดูประวัติการขาย
+  getSalesHistory: (params?: {
+    employee_id?: number;
+    start_date?: string;
+    end_date?: string;
+    page?: number;
+    per_page?: number;
+  }) => api.get('/api/employees/sales', { params }),
+};
+
 export default api;

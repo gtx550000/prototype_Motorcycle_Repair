@@ -3,11 +3,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base, get_db
-from .routers import auth, categories
+from .routers import auth, categories, employees
 from .schemas.user import UserCreate
 from .services.auth_service import get_user_by_username, create_user
 from .services.category_service import seed_categories_from_json
 from .models.user import User
+from .models import employee  # noqa: F401  — import so create_all sees the tables
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -46,6 +47,7 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(categories.router)
+app.include_router(employees.router)
 
 @app.get("/")
 def read_root():
