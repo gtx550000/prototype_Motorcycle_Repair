@@ -9,7 +9,8 @@ from ..models.user import User
 
 router = APIRouter(prefix="/api/categories", tags=["categories"])
 
-@router.get("/", response_model=CategoryListResponse)
+@router.get("", response_model=CategoryListResponse)
+@router.get("/", response_model=CategoryListResponse, include_in_schema=False)
 def read_categories(
     page: int = Query(1, ge=1),
     per_page: int = Query(10, ge=1, le=100),
@@ -29,7 +30,8 @@ def read_category(category_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Category not found")
     return db_category
 
-@router.post("/", response_model=CategoryResponse)
+@router.post("", response_model=CategoryResponse)
+@router.post("/", response_model=CategoryResponse, include_in_schema=False)
 def create_category_route(category_in: CategoryCreate, db: Session = Depends(get_db), current_user: User = Depends(require_owner)):
     return create_category(db=db, category_data=category_in, user_id=current_user.id)
 
