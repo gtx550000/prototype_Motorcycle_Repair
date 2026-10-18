@@ -26,6 +26,9 @@ export default function MultiStepCheckout() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [cashReceived, setCashReceived] = useState('');
   const [saving, setSaving] = useState(false);
+  const [paymentError, setPaymentError] = useState('');
+  const [saleId, setSaleId] = useState<number | null>(null);
+  const [saleCreatedAt, setSaleCreatedAt] = useState<string | null>(null);
 
   // ข้อมูลรถ/ลูกค้า
   const [customerInfo, setCustomerInfo] = useState({
@@ -93,8 +96,9 @@ export default function MultiStepCheckout() {
   const handleConfirmPayment = async () => {
     if (!selectedEmployeeId) return;
     setSaving(true);
+    setPaymentError('');
     try {
-      await employeeAPI.recordSale({
+      const response = await employeeAPI.recordSale({
         employee_id: selectedEmployeeId,
         license_plate: customerInfo.licensePlate || undefined,
         vehicle_model: customerInfo.vehicleModel || undefined,
@@ -104,18 +108,23 @@ export default function MultiStepCheckout() {
         total_amount: totalAmount,
         items: cartItems,
       });
+      setSaleId(response.data.id);
+      setSaleCreatedAt(response.data.created_at);
+      localStorage.removeItem('pos_cart');
+      nextStep();
     } catch (e) {
       console.error('Failed to record sale:', e);
+      setPaymentError('บันทึกการขายไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง');
     } finally {
       setSaving(false);
     }
-    localStorage.removeItem('pos_cart');
-    nextStep();
   };
 
   const goBackToStore = () => router.push('/dashboard/store');
+  const handlePrintReceipt = () => window.print();
 
   const selectedEmployee = employees.find((e) => e.id === selectedEmployeeId);
+  const receiptDate = saleCreatedAt ? new Date(saleCreatedAt) : new Date();
 
   if (cartItems.length === 0) {
     return (
@@ -126,11 +135,11 @@ export default function MultiStepCheckout() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 text-slate-800">
-      <div className="bg-white w-full max-w-3xl rounded-2xl shadow-lg overflow-hidden border border-slate-100">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-3 sm:p-6 text-slate-800 print:min-h-0 print:block print:bg-white print:p-0">
+      <div className="bg-white w-full max-w-3xl rounded-2xl shadow-lg overflow-hidden border border-slate-100 print:max-w-none print:rounded-none print:border-0 print:shadow-none print:overflow-visible">
 
         {/* Progress Bar */}
-        <div className="bg-slate-100 p-4 border-b">
+        <div className="bg-slate-100 p-4 border-b print:hidden">
           <div className="flex justify-between items-center max-w-lg mx-auto relative">
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 z-0"></div>
             <div className={`absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-blue-600 z-0 transition-all duration-300`}
@@ -150,7 +159,7 @@ export default function MultiStepCheckout() {
         </div>
 
         {/* Content */}
-        <div className="p-8 min-h-[400px]">
+        <div className="p-4 sm:p-8 min-h-[400px] print:min-h-0 print:p-0">
 
           {/* Step 1: สรุปรายการ */}
           {step === 1 && (
@@ -256,19 +265,19 @@ export default function MultiStepCheckout() {
                 )}
               </div>
 
-              <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
                 <button onClick={() => { setPaymentMethod('cash'); setCashReceived(''); }}
-                  className={`p-5 border-2 rounded-xl flex flex-col items-center gap-3 transition-all ${paymentMethod === 'cash' ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-blue-300'}`}>
+                  className={`p-4 sm:p-5 border-2 rounded-xl flex flex-row sm:flex-col items-center justify-center gap-3 transition-all ${paymentMethod === 'cash' ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-blue-300'}`}>
                   <Banknote className={`w-8 h-8 ${paymentMethod === 'cash' ? 'text-blue-600' : 'text-slate-400'}`} />
                   <span className="font-semibold text-sm">เงินสด</span>
                 </button>
                 <button onClick={() => setPaymentMethod('transfer')}
-                  className={`p-5 border-2 rounded-xl flex flex-col items-center gap-3 transition-all ${paymentMethod === 'transfer' ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-blue-300'}`}>
+                  className={`p-4 sm:p-5 border-2 rounded-xl flex flex-row sm:flex-col items-center justify-center gap-3 transition-all ${paymentMethod === 'transfer' ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-blue-300'}`}>
                   <QrCode className={`w-8 h-8 ${paymentMethod === 'transfer' ? 'text-blue-600' : 'text-slate-400'}`} />
                   <span className="font-semibold text-sm">โอน / QR Code</span>
                 </button>
                 <button onClick={() => setPaymentMethod('card')}
-                  className={`p-5 border-2 rounded-xl flex flex-col items-center gap-3 transition-all ${paymentMethod === 'card' ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-blue-300'}`}>
+                  className={`p-4 sm:p-5 border-2 rounded-xl flex flex-row sm:flex-col items-center justify-center gap-3 transition-all ${paymentMethod === 'card' ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-blue-300'}`}>
                   <CreditCard className={`w-8 h-8 ${paymentMethod === 'card' ? 'text-blue-600' : 'text-slate-400'}`} />
                   <span className="font-semibold text-sm">บัตรเครดิต</span>
                 </button>
@@ -313,46 +322,94 @@ export default function MultiStepCheckout() {
 
           {/* Step 4: เสร็จสิ้น */}
           {step === 4 && (
-            <div className="text-center py-10">
-              <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
-              <h2 className="text-2xl font-bold mb-2">ทำรายการสำเร็จ!</h2>
-              <p className="text-slate-500 mb-2">บันทึกข้อมูลการซ่อมและรับชำระเงินเรียบร้อยแล้ว</p>
-
-              <div className="bg-slate-50 rounded-lg border p-4 max-w-sm mx-auto mb-6 text-left text-sm">
-                <div className="flex justify-between mb-1">
-                  <span className="text-slate-500">ยอดชำระ:</span>
-                  <span className="font-bold">฿{totalAmount.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between mb-1">
-                  <span className="text-slate-500">ช่องทาง:</span>
-                  <span className="font-medium">
-                    {paymentMethod === 'cash' ? '💵 เงินสด' : paymentMethod === 'transfer' ? '📱 โอน/QR' : '💳 บัตรเครดิต'}
-                  </span>
-                </div>
-                {paymentMethod === 'cash' && changeAmount > 0 && (
-                  <div className="flex justify-between">
-                    <span className="text-slate-500">เงินทอน:</span>
-                    <span className="font-medium text-green-600">฿{changeAmount.toLocaleString()}</span>
-                  </div>
-                )}
-                {customerInfo.licensePlate && (
-                  <div className="flex justify-between mt-2 pt-2 border-t">
-                    <span className="text-slate-500">ทะเบียนรถ:</span>
-                    <span className="font-medium">{customerInfo.licensePlate}</span>
-                  </div>
-                )}
-                <div className="flex justify-between mt-1">
-                  <span className="text-slate-500">พนักงาน:</span>
-                  <span className="font-medium">{selectedEmployee?.full_name || user?.full_name || '-'}</span>
-                </div>
+            <div>
+              <div className="print:hidden text-center py-8 sm:py-10">
+                <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
+                <h2 className="text-2xl font-bold mb-2">ทำรายการสำเร็จ!</h2>
+                <p className="text-slate-500 mb-6">บันทึกข้อมูลการซ่อมและรับชำระเงินเรียบร้อยแล้ว</p>
               </div>
 
-              <div className="flex gap-4 justify-center">
-                <button className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700">
+              <section className="receipt-print mx-auto max-w-3xl border border-slate-200 rounded-xl p-5 sm:p-8 print:max-w-none print:rounded-none print:border-0 print:p-0">
+                <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between border-b-2 border-slate-800 pb-5">
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl" aria-hidden="true">🏍️</span>
+                      <div>
+                        <h2 className="text-lg sm:text-xl font-bold text-slate-900">ร้านซ่อมมอเตอร์ไซค์</h2>
+                        <p className="text-xs text-slate-500">ใบเสร็จรับเงิน / RECEIPT</p>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-3">ขอบคุณที่ใช้บริการ</p>
+                  </div>
+                  <div className="sm:text-right text-sm">
+                    <p className="font-bold text-slate-900">เลขที่ใบเสร็จ: {saleId ? `BILL-${String(saleId).padStart(5, '0')}` : '-'}</p>
+                    <p className="text-slate-600">วันที่: {receiptDate.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    <p className="text-slate-600">เวลา: {receiptDate.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</p>
+                  </div>
+                </header>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 py-5 border-b border-slate-200 text-sm">
+                  <div className="space-y-1">
+                    <h3 className="font-semibold text-slate-700">ข้อมูลลูกค้า</h3>
+                    <p>ชื่อ: {customerInfo.customerName || 'ลูกค้าทั่วไป'}</p>
+                    <p>ทะเบียนรถ: {customerInfo.licensePlate || '-'}</p>
+                    <p>รุ่นรถ: {customerInfo.vehicleModel || '-'}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-semibold text-slate-700">ข้อมูลการชำระเงิน</h3>
+                    <p>พนักงาน: {selectedEmployee?.full_name || user?.full_name || '-'}</p>
+                    <p>ช่องทาง: {paymentMethod === 'cash' ? 'เงินสด' : paymentMethod === 'transfer' ? 'โอน / QR Code' : 'บัตรเครดิต'}</p>
+                    {paymentMethod === 'cash' && <p>รับเงิน: ฿{cashReceivedNum.toLocaleString()}</p>}
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto print:overflow-visible">
+                  <table className="w-full text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b-2 border-slate-300 text-left">
+                        <th className="py-3 pr-2 font-semibold">รายการ</th>
+                        <th className="py-3 px-2 text-right font-semibold whitespace-nowrap">ราคา/หน่วย</th>
+                        <th className="py-3 px-2 text-center font-semibold">จำนวน</th>
+                        <th className="py-3 pl-2 text-right font-semibold whitespace-nowrap">รวม (บาท)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cartItems.map((item) => (
+                        <tr key={item.id} className="border-b border-slate-100">
+                          <td className="py-3 pr-2">{item.icon || '📦'} {item.name}</td>
+                          <td className="py-3 px-2 text-right whitespace-nowrap">฿{item.price.toLocaleString()}</td>
+                          <td className="py-3 px-2 text-center">{item.qty}</td>
+                          <td className="py-3 pl-2 text-right whitespace-nowrap">฿{(item.price * item.qty).toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="ml-auto mt-5 w-full sm:max-w-xs space-y-2 text-sm">
+                  <div className="flex justify-between font-bold text-base border-t border-slate-300 pt-3">
+                    <span>ยอดชำระทั้งสิ้น</span>
+                    <span>฿{totalAmount.toLocaleString()}</span>
+                  </div>
+                  {paymentMethod === 'cash' && (
+                    <div className="flex justify-between text-slate-600">
+                      <span>เงินทอน</span>
+                      <span>฿{Math.max(0, changeAmount).toLocaleString()}</span>
+                    </div>
+                  )}
+                </div>
+                {customerInfo.note && (
+                  <p className="mt-5 text-sm text-slate-600 border-t border-slate-200 pt-3">หมายเหตุ: {customerInfo.note}</p>
+                )}
+                <p className="text-center text-xs text-slate-500 mt-8">เอกสารนี้ออกจากระบบเพื่อเป็นหลักฐานการรับชำระเงิน</p>
+              </section>
+
+              <div className="print:hidden flex flex-col sm:flex-row gap-3 justify-center mt-6">
+                <button onClick={handlePrintReceipt} className="flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700">
                   <Printer className="w-5 h-5" /> พิมพ์ใบเสร็จ
                 </button>
                 <button onClick={goBackToStore}
-                  className="flex items-center gap-2 border border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-medium hover:bg-slate-50">
+                  className="flex items-center justify-center gap-2 border border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-medium hover:bg-slate-50">
                   <ArrowLeft className="w-5 h-5" /> กลับหน้าขายหลัก
                 </button>
               </div>
@@ -362,7 +419,7 @@ export default function MultiStepCheckout() {
 
         {/* Footer Buttons */}
         {step < 4 && (
-          <div className="bg-slate-50 p-4 border-t flex justify-between">
+          <div className="bg-slate-50 p-4 border-t flex justify-between print:hidden">
             <button onClick={step === 1 ? goBackToStore : prevStep}
               className="flex items-center gap-1 px-4 py-2 font-medium rounded-lg text-slate-600 hover:bg-slate-200">
               {step === 1 ? <><ArrowLeft className="w-5 h-5" /> กลับหน้าร้าน</> : <><ChevronLeft className="w-5 h-5" /> ย้อนกลับ</>}
@@ -374,6 +431,11 @@ export default function MultiStepCheckout() {
             >
               {step === 3 ? (saving ? 'กำลังบันทึก...' : 'ยืนยันการชำระเงิน') : 'ถัดไป'} <ChevronRight className="w-5 h-5" />
             </button>
+          </div>
+        )}
+        {paymentError && step === 3 && (
+          <div role="alert" className="px-4 pb-4 text-sm text-red-700 print:hidden">
+            {paymentError}
           </div>
         )}
       </div>

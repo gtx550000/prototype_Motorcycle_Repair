@@ -23,13 +23,13 @@ export const Sidebar = () => {
     <>
       {/* Mobile Toggle */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow"
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow print:hidden"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
       >
         ☰
       </button>
 
-      <div className={`fixed inset-y-0 left-0 z-40 w-64 bg-gray-900 text-white transform transition-transform duration-300 md:translate-x-0 md:static ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed inset-y-0 left-0 z-40 w-64 bg-gray-900 text-white transform transition-transform duration-300 md:translate-x-0 md:static print:hidden ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center justify-center h-16 bg-gray-950 font-bold text-lg">
           🏍️ ร้านซ่อมมอเตอร์ไซค์
         </div>
@@ -64,7 +64,7 @@ export const Sidebar = () => {
       </div>
 
       {isMobileOpen && (
-        <div className="fixed inset-0 bg-black opacity-50 z-30 md:hidden" onClick={() => setIsMobileOpen(false)} />
+        <div className="fixed inset-0 bg-black opacity-50 z-30 md:hidden print:hidden" onClick={() => setIsMobileOpen(false)} />
       )}
     </>
   );

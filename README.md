@@ -13,6 +13,7 @@
 ## 📋 สารบัญ
 
 - [ภาพรวมระบบ](#ภาพรวมระบบ)
+- [ระบบทำงานอย่างไร](#ระบบทำงานอย่างไร)
 - [โครงสร้างโปรเจค](#โครงสร้างโปรเจค)
 - [ความต้องการของระบบ](#ความต้องการของระบบ)
 - [วิธีติดตั้ง](#วิธีติดตั้ง)
@@ -37,6 +38,42 @@
 | 💳 **ชำระเงิน Multi-step** | ตรวจสอบรายการ → ข้อมูลรถ/ลูกค้า → เลือกพนักงานผู้ออกบิล → ช่องทางชำระ → ยืนยัน |
 | 👥 **จัดการลูกจ้าง & ค่าแรง** | จัดการข้อมูลพนักงาน กำหนดค่าแรงรายวัน ดูสถิติยอดขายและประวัติการขาย (เฉพาะเจ้าของร้าน) |
 | 🧾 **ประวัติการขาย** | บันทึกประวัติการขายผูกกับพนักงานผู้ออกบิล ดูรายงานย้อนหลังตามช่วงวันที่ |
+| 🖨️ **ใบเสร็จ** | สร้างใบเสร็จจากรายการขายที่บันทึกสำเร็จ และพิมพ์หรือบันทึกเป็น PDF ผ่านเบราว์เซอร์ |
+
+## ระบบทำงานอย่างไร
+
+ระบบแบ่งเป็น 3 ส่วนหลัก:
+
+1. **Frontend (`frontend/`)** — Next.js App Router แสดงหน้าเว็บและจัดการสถานะหน้าจอ ใช้ `AuthContext` เก็บข้อมูลผู้ใช้ที่ล็อกอิน และ Axios ใน `src/lib/api.ts` เรียก Backend โดยแนบ JWT
+2. **Backend (`backend/`)** — FastAPI ให้ REST API; Routers ตรวจสิทธิ์และรับส่งข้อมูล, Schemas ตรวจรูปแบบข้อมูล, Services จัดการ business logic และ SQLAlchemy Models กำหนดตาราง
+3. **Database (`docker-compose.yml`)** — PostgreSQL เก็บผู้ใช้ หมวดหมู่อะไหล่ ค่าแรง และประวัติการขาย; pgAdmin ใช้ตรวจสอบฐานข้อมูลผ่านเว็บ
+
+### วงจรการทำงานหลัก
+
+```text
+เปิดระบบ
+  └─ FastAPI สร้างตารางที่ยังไม่มี และ seed บัญชีเริ่มต้น/หมวดหมู่จาก data/categories.json
+
+เข้าสู่ระบบ
+  └─ Frontend ขอ JWT → เก็บ token ใน localStorage → แนบ token ไปกับ API request
+
+ขายสินค้า
+  └─ เลือกสินค้า → เก็บตะกร้าใน localStorage (pos_cart)
+      ├─ ใบเสนอราคา: คำนวณและพิมพ์จาก Frontend; ไม่สร้างประวัติการขาย
+      └─ ชำระเงินจริง: ส่งรายการและข้อมูลบิลไป POST /api/employees/sales
+          └─ Backend บันทึก SaleRecord ใน PostgreSQL → Frontend แสดงใบเสร็จ
+              └─ หน้ารายงาน/จัดการลูกจ้างอ่านประวัติจาก API
+```
+
+### สิทธิ์และขอบเขตข้อมูล
+
+- เจ้าของร้าน (`owner`) จัดการหมวดหมู่และบัญชีลูกจ้าง กำหนดค่าแรง และดูรายงานการขายทั้งหมดได้
+- พนักงาน (`employee`) ใช้หน้าร้านและบันทึกการขายได้; API ประวัติการขายจำกัดให้พนักงานดูเฉพาะรายการของตน
+- หน้า Dashboard ฝั่ง Frontend ต้องล็อกอินก่อนใช้งาน แต่ API อ่านหมวดหมู่ (`GET /api/categories`) เปิดให้อ่านได้โดยไม่ต้องมี JWT; การเพิ่ม แก้ไข และลบหมวดหมู่ต้องเป็นเจ้าของร้าน
+- ใบเสนอราคาเป็นเอกสารประเมินราคา ไม่ใช่รายการขายจริง; ระบบปัจจุบันยังไม่มีการเคลื่อนไหว/ตัดสต็อกสินค้า
+- ใบเสร็จหลังชำระเงินใช้ข้อมูลการขายที่บันทึกสำเร็จ ส่วนการพิมพ์ใช้ print stylesheet และคำสั่งพิมพ์/PDF ของเบราว์เซอร์
+
+> ตอนเริ่ม Backend ใช้ `Base.metadata.create_all()` เพื่อสร้างตารางที่ยังไม่มี ไม่ได้ปรับโครงสร้างตารางเดิมโดยอัตโนมัติเมื่อมีการเปลี่ยน Model; การเปลี่ยน Schema ฐานข้อมูลต้องวางแผน migration หรือปรับฐานข้อมูลตามขั้นตอนของทีม
 
 ---
 
@@ -47,62 +84,63 @@ motorcycle-parts-shop/
 │
 ├── 📁 backend/                    # FastAPI Backend
 │   ├── app/
-│   │   ├── main.py                # Entry point, lifespan, seed data
-│   │   ├── config.py              # Settings (ENV vars)
-│   │   ├── database.py            # SQLAlchemy engine + session
+│   │   ├── main.py                # สร้างตาราง, seed ข้อมูล, รวม routers
+│   │   ├── config.py              # อ่าน settings จาก environment / .env
+│   │   ├── database.py            # SQLAlchemy engine, Base และ DB session
 │   │   ├── models/
-│   │   │   ├── category.py        # Category model (self-referencing)
-│   │   │   └── user.py            # User model
+│   │   │   ├── category.py        # หมวดหมู่แบบ parent/child และราคา
+│   │   │   ├── employee.py        # ค่าแรงและประวัติการขาย
+│   │   │   └── user.py            # บัญชีผู้ใช้และ role
 │   │   ├── schemas/
-│   │   │   ├── category.py        # Pydantic schemas
-│   │   │   └── user.py
+│   │   │   ├── category.py        # ตรวจข้อมูลหมวดหมู่
+│   │   │   ├── employee.py        # ตรวจข้อมูลค่าแรง/การขาย/รายงาน
+│   │   │   └── user.py            # ตรวจข้อมูลบัญชีและ token
 │   │   ├── services/
-│   │   │   ├── auth_service.py    # Login, create user logic
-│   │   │   └── category_service.py # CRUD + filter + search
+│   │   │   ├── auth_service.py    # ตรวจรหัสผ่านและสร้างผู้ใช้
+│   │   │   ├── category_service.py # CRUD, ค้นหา และ seed หมวดหมู่
+│   │   │   └── employee_service.py # ค่าแรง ประวัติขาย และสรุปรายงาน
 │   │   ├── routers/
-│   │   │   ├── auth.py            # POST /api/auth/login, GET /api/auth/me
-│   │   │   └── categories.py      # CRUD /api/categories
+│   │   │   ├── auth.py            # Login, current user, owner register
+│   │   │   ├── categories.py      # CRUD /api/categories
+│   │   │   └── employees.py       # พนักงาน ค่าแรง การขาย และรายงาน
 │   │   └── middleware/
 │   │       └── auth.py            # JWT verify, role guard
 │   ├── requirements.txt
-│   └── .env                       # Database URL, Secret Key
+│   └── .env                       # ตั้งค่าท้องถิ่น (ไม่ควร commit)
 │
 ├── 📁 frontend/                   # Next.js 14 Frontend
 │   └── src/
 │       ├── app/
-│       │   ├── page.tsx           # Redirect → /login
+│       │   ├── page.tsx           # หน้าเริ่มต้น
 │       │   ├── login/page.tsx     # หน้าล็อกอิน
+│       │   ├── globals.css        # Tailwind และ print styles
 │       │   └── dashboard/
 │       │       ├── layout.tsx     # Layout พร้อม Sidebar + Header
 │       │       ├── page.tsx       # หน้า Dashboard หลัก
 │       │       ├── categories/    # จัดการหมวดหมู่
-│       │       ├── store/         # หน้าร้าน POS
-│       │       └── payment/       # หน้าชำระเงิน Multi-step
+│       │       ├── store/         # หน้าร้าน POS และตะกร้า
+│       │       ├── quotation/     # ใบเสนอราคาและพิมพ์/PDF
+│       │       ├── payment/       # ชำระเงินและใบเสร็จ
+│       │       ├── Employee/      # จัดการลูกจ้าง (Owner)
+│       │       └── reports/       # รายงานและรายละเอียดบิล (Owner)
 │       ├── components/
 │       │   ├── auth/              # LoginForm, ProtectedRoute
 │       │   ├── categories/        # CategoryList, CategoryForm, etc.
 │       │   ├── layout/            # Sidebar, Header
 │       │   └── ui/                # Button, Modal, Table, Badge, Input
-│       ├── context/
-│       │   └── AuthContext.tsx    # Global Auth State (user, login, logout)
-│       ├── hooks/
-│       │   ├── useAuth.ts         # Hook สำหรับ AuthContext
-│       │   └── useCategories.ts   # Hook ดึง/จัดการ categories
-│       ├── lib/
-│       │   ├── api.ts             # Axios instance + API functions
-│       │   └── auth.ts            # localStorage token helpers
-│       └── types/
-│           ├── auth.ts            # User, Token types
-│           └── category.ts        # Category, CategoryFormData types
+│       ├── context/               # AuthContext: ผู้ใช้และสถานะล็อกอิน
+│       ├── hooks/                 # useAuth, useCategories
+│       ├── lib/                   # Axios API client และ token helpers
+│       └── types/                 # TypeScript types ของ auth, categories, employees
 │
 ├── 📁 data/                       # Seed Data (JSON)
-│   ├── categories.json            # 96 หมวดหมู่อะไหล่
-│   ├── users_seed.json            # บัญชีผู้ใช้เริ่มต้น
-│   └── parts_*.json               # ข้อมูลอะไหล่แยกประเภท
+│   ├── categories.json            # หมวดหมู่ที่ Backend seed ตอนเริ่มระบบ
+│   ├── users_seed.json            # ข้อมูลผู้ใช้ประกอบ (ไม่ได้อ่านโดย startup ปัจจุบัน)
+│   └── parts_*.json               # ข้อมูลอะไหล่แยกประเภทสำหรับข้อมูลประกอบ
 │
 ├── docker-compose.yml             # PostgreSQL + pgAdmin
 ├── start_backend.bat              # 🚀 สคริปต์เริ่ม backend (Windows)
-├── update_data.py                 # สคริปต์ reset + seed ข้อมูล
+├── update_data.py                 # สคริปต์จัดการข้อมูลหมวดหมู่
 └── .gitignore
 ```
 
@@ -162,16 +200,16 @@ cd ..
 
 ### ขั้นที่ 4 — ตั้งค่า Environment Variables
 
-ไฟล์ `backend/.env` มีค่าเริ่มต้นพร้อมใช้งานแล้ว:
+สร้างไฟล์ `backend/.env` สำหรับเครื่องพัฒนา โดยใช้ URL ฐานข้อมูลที่ตรงกับ PostgreSQL ใน `docker-compose.yml`:
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres123@localhost:5432/motorcycle_parts_db
-SECRET_KEY=motorcycle-parts-shop-secret-key-2024-very-long-random-string
+DATABASE_URL=postgresql://<user>:<password>@localhost:5432/motorcycle_parts_db
+SECRET_KEY=<random-long-secret>
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=480
 ```
 
-> 🔒 **สำหรับ Production:** ให้เปลี่ยน `SECRET_KEY` เป็นค่าสุ่มที่ยาวและซับซ้อน
+> 🔒 ห้ามนำ `.env` หรือ secret จริงขึ้น Git; สำหรับ Production ให้กำหนด `SECRET_KEY` แบบสุ่มและเก็บใน environment/secret manager ของระบบ
 
 ---
 
@@ -328,7 +366,7 @@ npm run dev
 | 1️⃣ | สรุปรายการ | ตรวจสอบอะไหล่และยอดรวม |
 | 2️⃣ | ข้อมูลรถ/ลูกค้า | ทะเบียน, รุ่นรถ, ชื่อลูกค้า (ไม่บังคับ) |
 | 3️⃣ | ชำระเงิน | เงินสด (คำนวณทอน) / โอน-QR / บัตรเครดิต |
-| 4️⃣ | เสร็จสิ้น | สรุปบิล พร้อมพิมพ์ใบเสร็จ |
+| 4️⃣ | เสร็จสิ้น | ใบเสร็จแสดงเลขที่บิล วันที่ เวลา ลูกค้า/รถ พนักงาน รายการสินค้า ช่องทางชำระเงิน และยอดเงิน; พิมพ์หรือบันทึกเป็น PDF ได้ |
 
 > ตะกร้าจะถูกล้างเฉพาะเมื่อกด **"ยืนยันการชำระเงิน"** เท่านั้น
 
@@ -367,9 +405,9 @@ npm run dev
 
 | Method | Endpoint | คำอธิบาย | Auth |
 |---|---|---|---|
-| GET | `/api/categories` | ดูรายการหมวดหมู่ (รองรับ search, filter, pagination) | ✅ |
+| GET | `/api/categories` | ดูรายการหมวดหมู่ (รองรับ search, filter, pagination) | ❌ |
 | POST | `/api/categories` | สร้างหมวดหมู่ใหม่ | ✅ Owner only |
-| GET | `/api/categories/{id}` | ดูหมวดหมู่รายการเดียว | ✅ |
+| GET | `/api/categories/{id}` | ดูหมวดหมู่รายการเดียว | ❌ |
 | PUT | `/api/categories/{id}` | แก้ไขหมวดหมู่ | ✅ Owner only |
 | DELETE | `/api/categories/{id}` | ลบหมวดหมู่ (ลบลูกด้วย) | ✅ Owner only |
 
@@ -524,11 +562,5 @@ docker compose up -d
 
 ---
 
-## 📞 ติดต่อ
-
-- **Repository:** https://github.com/gtx550000/prototype_Motorcycle_Repair
-- **Owner:** gtx550000
-
----
 
 *อัพเดตล่าสุด: ตุลาคม 2026*
