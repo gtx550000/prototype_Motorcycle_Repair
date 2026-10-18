@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
-import { ShoppingCart, Plus, Minus, Trash2, Clock, CheckCircle, Search, Package } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Trash2, Clock, CheckCircle, Search, Package, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCategories } from '@/hooks/useCategories';
 import { useAuth } from '@/hooks/useAuth';
@@ -53,6 +53,13 @@ export default function POSPage() {
     if (cart.length === 0) return;
     localStorage.setItem('pos_cart', JSON.stringify(cart));
     router.push('/dashboard/payment');
+  };
+
+  // ฟังก์ชันเปิดใบเสนอราคา (ประเมินราคาก่อนตัดสินใจ ไม่ตัดสต็อก)
+  const handleQuotation = () => {
+    if (cart.length === 0) return;
+    localStorage.setItem('pos_cart', JSON.stringify(cart));
+    router.push('/dashboard/quotation');
   };
 
   // ดึงข้อมูลหมวดหมู่จาก API (per_page=100 เพื่อดึงมาทั้งหมด)
@@ -321,6 +328,13 @@ export default function POSPage() {
                   >
                     <CheckCircle className="w-4 h-4" />
                     ชำระเงิน
+                  </button>
+                  <button
+                    onClick={handleQuotation}
+                    className="w-full mt-2 bg-amber-500 text-white py-2.5 rounded-lg font-medium hover:bg-amber-600 transition flex items-center justify-center gap-2 shadow-sm"
+                  >
+                    <FileText className="w-4 h-4" />
+                    📄 ใบเสนอราคา (ให้ลูกค้าดูก่อน)
                   </button>
                   <button
                     onClick={() => {
