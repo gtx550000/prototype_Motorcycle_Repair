@@ -49,3 +49,33 @@ export interface EmployeeDropdown {
   is_active: boolean;
 }
 
+export interface ItemSaleStat {
+  item_id: number;
+  item_name: string;
+  icon?: string;
+  price: number;
+  total_qty: number;
+  total_amount: number;
+}
+
+export interface EmployeeSaleStat {
+  employee_id: number;
+  employee_name: string;
+  username: string;
+  total_revenue: number;
+  total_bills: number;
+  total_items_sold: number;
+  items_breakdown: ItemSaleStat[];
+}
+
+export interface SalesReportResponse {
+  start_date: string;
+  end_date: string;
+  total_revenue: number;
+  total_bills: number;
+  total_items_sold: number;
+  employees_summary: EmployeeSaleStat[];
+  top_items: ItemSaleStat[];
+  records: SaleRecord[];
+}
+

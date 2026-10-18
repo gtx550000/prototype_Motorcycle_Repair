@@ -78,6 +78,12 @@ export const employeeAPI = {
     page?: number;
     per_page?: number;
   }) => api.get('/api/employees/sales', { params }),
+  // ดูรายงานสรุปการขาย (owner only)
+  getSalesReport: (params?: {
+    start_date?: string;
+    end_date?: string;
+    employee_id?: number;
+  }) => api.get('/api/employees/reports/sales', { params }),
 };
 
 export default api;

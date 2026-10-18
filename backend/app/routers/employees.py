@@ -9,7 +9,8 @@ from ..models.user import User
 from ..models.employee import EmployeeWage, SaleRecord
 from ..schemas.employee import (
     EmployeeWithWage, EmployeeWageUpdate, EmployeeWageResponse,
-    EmployeeUpdate, SaleRecordCreate, SaleRecordResponse, SaleRecordListResponse
+    EmployeeUpdate, SaleRecordCreate, SaleRecordResponse, SaleRecordListResponse,
+    SalesReportResponse
 )
 from ..schemas.user import UserResponse
 from ..services.employee_service import (
@@ -17,6 +18,7 @@ from ..services.employee_service import (
     upsert_wage,
     create_sale_record,
     get_sale_records,
+    get_sales_report,
 )
 
 router = APIRouter(prefix="/api/employees", tags=["employees"])
@@ -184,4 +186,23 @@ def get_sales_history(
         skip=skip, limit=per_page
     )
     return SaleRecordListResponse(records=records, total=total, total_amount=total_amount)
+
+
+# ─── รายงานสรุปการขาย (Daily / Weekly / Custom) — เฉพาะเจ้าของร้าน (Owner only) ─────
+@router.get("/reports/sales", response_model=SalesReportResponse)
+def get_sales_report_endpoint(
+    start_date: Optional[date] = Query(None, description="วันเริ่มต้น (default: วันนี้)"),
+    end_date: Optional[date] = Query(None, description="วันสิ้นสุด (default: วันนี้)"),
+    employee_id: Optional[int] = Query(None, description="กรองเฉพาะพนักงานคนใดคนหนึ่ง"),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_owner),
+):
+    if not end_date:
+        end_date = date.today()
+    if not start_date:
+        start_date = end_date
+    if start_date > end_date:
+        raise HTTPException(status_code=400, detail="วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด")
+
+    return get_sales_report(db, start_date=start_date, end_date=end_date, employee_id=employee_id)
 

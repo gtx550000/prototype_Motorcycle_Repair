@@ -13,6 +13,7 @@ export const Sidebar = () => {
     { href: '/dashboard', label: '📊 แดชบอร์ด', ownerOnly: false },
     { href: '/dashboard/categories', label: '📦 หมวดหมู่อะไหล่', ownerOnly: false },
     { href: '/dashboard/store', label: '🛒 หน้าร้าน (POS)', ownerOnly: false },
+    { href: '/dashboard/reports', label: '📈 รายงานการขาย', ownerOnly: true },
     { href: '/dashboard/Employee', label: '👥 จัดการลูกจ้าง', ownerOnly: true },
   ];
 

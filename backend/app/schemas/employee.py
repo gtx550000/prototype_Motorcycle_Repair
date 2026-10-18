@@ -98,3 +98,33 @@ class SaleRecordListResponse(BaseModel):
     total: int
     total_amount: float
 
+
+class ItemSaleStat(BaseModel):
+    item_id: int
+    item_name: str
+    icon: Optional[str] = "📦"
+    price: float
+    total_qty: int
+    total_amount: float
+
+
+class EmployeeSaleStat(BaseModel):
+    employee_id: int
+    employee_name: str
+    username: str
+    total_revenue: float
+    total_bills: int
+    total_items_sold: int
+    items_breakdown: List[ItemSaleStat] = []
+
+
+class SalesReportResponse(BaseModel):
+    start_date: date
+    end_date: date
+    total_revenue: float
+    total_bills: int
+    total_items_sold: int
+    employees_summary: List[EmployeeSaleStat] = []
+    top_items: List[ItemSaleStat] = []
+    records: List[SaleRecordResponse] = []
+
