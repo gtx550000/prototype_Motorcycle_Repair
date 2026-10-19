@@ -8,7 +8,8 @@ from ..models.employee import EmployeeWage, SaleRecord
 from ..models.user import User
 from ..schemas.employee import (
     EmployeeWageCreate, EmployeeWageUpdate,
-    SaleRecordCreate, EmployeeWithWage, SaleRecordResponse
+    SaleRecordCreate, EmployeeWithWage, SaleRecordResponse,
+    ItemSaleStat, EmployeeSaleStat, SalesReportResponse
 )
 
 
@@ -148,4 +149,145 @@ def get_sale_records(
         result.append(resp)
 
     return result, total, total_amount
+
+
+def get_sales_report(
+    db: Session,
+    start_date: date,
+    end_date: date,
+    employee_id: Optional[int] = None
+) -> SalesReportResponse:
+    query = db.query(SaleRecord).filter(
+        SaleRecord.sale_date >= start_date,
+        SaleRecord.sale_date <= end_date
+    )
+    if employee_id:
+        query = query.filter(SaleRecord.employee_id == employee_id)
+
+    records = query.order_by(SaleRecord.created_at.desc()).all()
+
+    total_revenue = 0.0
+    total_bills = len(records)
+    total_items_sold = 0
+
+    emp_map = {}
+    top_items_map = {}
+    sale_record_responses = []
+
+    all_users = {u.id: u for u in db.query(User).all()}
+
+    for r in records:
+        rec_revenue = float(r.total_amount)
+        total_revenue += rec_revenue
+
+        emp = all_users.get(r.employee_id)
+        emp_name = emp.full_name if emp else f"พนักงาน ID {r.employee_id}"
+        emp_username = emp.username if emp else ""
+
+        if r.employee_id not in emp_map:
+            emp_map[r.employee_id] = {
+                "employee_id": r.employee_id,
+                "employee_name": emp_name,
+                "username": emp_username,
+                "total_revenue": 0.0,
+                "total_bills": 0,
+                "total_items_sold": 0,
+                "items": {}
+            }
+
+        emp_entry = emp_map[r.employee_id]
+        emp_entry["total_revenue"] += rec_revenue
+        emp_entry["total_bills"] += 1
+
+        items = []
+        if r.items_json:
+            try:
+                items = json.loads(r.items_json)
+            except Exception:
+                items = []
+
+        for item in items:
+            item_id = item.get("id", 0)
+            item_name = item.get("name", "ไม่ระบุชื่อสินค้า")
+            item_icon = item.get("icon", "📦")
+            price = float(item.get("price", 0.0))
+            qty = int(item.get("qty", 1))
+
+            total_items_sold += qty
+            emp_entry["total_items_sold"] += qty
+
+            if item_id not in emp_entry["items"]:
+                emp_entry["items"][item_id] = {
+                    "item_id": item_id,
+                    "item_name": item_name,
+                    "icon": item_icon,
+                    "price": price,
+                    "total_qty": 0,
+                    "total_amount": 0.0
+                }
+            emp_entry["items"][item_id]["total_qty"] += qty
+            emp_entry["items"][item_id]["total_amount"] += price * qty
+
+            if item_id not in top_items_map:
+                top_items_map[item_id] = {
+                    "item_id": item_id,
+                    "item_name": item_name,
+                    "icon": item_icon,
+                    "price": price,
+                    "total_qty": 0,
+                    "total_amount": 0.0
+                }
+            top_items_map[item_id]["total_qty"] += qty
+            top_items_map[item_id]["total_amount"] += price * qty
+
+        sale_record_responses.append(SaleRecordResponse(
+            id=r.id,
+            employee_id=r.employee_id,
+            employee_name=emp_name,
+            sale_date=r.sale_date,
+            license_plate=r.license_plate,
+            vehicle_model=r.vehicle_model,
+            customer_name=r.customer_name,
+            note=r.note,
+            payment_method=r.payment_method,
+            total_amount=rec_revenue,
+            items_json=r.items_json,
+            created_at=r.created_at,
+        ))
+
+    employees_summary = []
+    for emp_data in emp_map.values():
+        items_list = sorted(
+            [ItemSaleStat(**it) for it in emp_data["items"].values()],
+            key=lambda x: x.total_qty,
+            reverse=True
+        )
+        employees_summary.append(EmployeeSaleStat(
+            employee_id=emp_data["employee_id"],
+            employee_name=emp_data["employee_name"],
+            username=emp_data["username"],
+            total_revenue=round(emp_data["total_revenue"], 2),
+            total_bills=emp_data["total_bills"],
+            total_items_sold=emp_data["total_items_sold"],
+            items_breakdown=items_list
+        ))
+
+    employees_summary.sort(key=lambda x: x.total_revenue, reverse=True)
+
+    top_items = sorted(
+        [ItemSaleStat(**it) for it in top_items_map.values()],
+        key=lambda x: x.total_qty,
+        reverse=True
+    )
+
+    return SalesReportResponse(
+        start_date=start_date,
+        end_date=end_date,
+        total_revenue=round(total_revenue, 2),
+        total_bills=total_bills,
+        total_items_sold=total_items_sold,
+        employees_summary=employees_summary,
+        top_items=top_items,
+        records=sale_record_responses
+    )
 

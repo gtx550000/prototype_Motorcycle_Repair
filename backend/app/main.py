@@ -30,6 +30,16 @@ async def lifespan(app: FastAPI):
         # Seed categories
         json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "categories.json")
         seed_categories_from_json(db, json_path)
+
+        # Sync PostgreSQL sequences with max IDs so auto-increment works properly
+        try:
+            from sqlalchemy import text
+            db.execute(text("SELECT setval(pg_get_serial_sequence('categories', 'id'), COALESCE(max(id), 1)) FROM categories;"))
+            db.execute(text("SELECT setval(pg_get_serial_sequence('users', 'id'), COALESCE(max(id), 1)) FROM users;"))
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            print(f"Warning: Failed to sync sequences: {e}")
     finally:
         db.close()
         

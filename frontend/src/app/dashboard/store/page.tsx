@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
-import { ShoppingCart, Plus, Minus, Trash2, Clock, CheckCircle, Search, Package } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Trash2, Clock, CheckCircle, Search, Package, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCategories } from '@/hooks/useCategories';
 import { useAuth } from '@/hooks/useAuth';
@@ -55,6 +55,13 @@ export default function POSPage() {
     router.push('/dashboard/payment');
   };
 
+  // ฟังก์ชันเปิดใบเสนอราคา (ประเมินราคาก่อนตัดสินใจ ไม่ตัดสต็อก)
+  const handleQuotation = () => {
+    if (cart.length === 0) return;
+    localStorage.setItem('pos_cart', JSON.stringify(cart));
+    router.push('/dashboard/quotation');
+  };
+
   // ดึงข้อมูลหมวดหมู่จาก API (per_page=100 เพื่อดึงมาทั้งหมด)
   useEffect(() => {
     fetchCategories(1, '', activeTab === 'all' ? '' : activeTab);
@@ -96,7 +103,7 @@ export default function POSPage() {
           name: cat.name,
           name_en: cat.name_en,
           icon: cat.icon,
-          price: cat.price ?? 0,
+          price: cat.price ?? 0, // ดึงราคาจริงจาก API
           qty: 1,
         },
       ];
@@ -279,12 +286,12 @@ export default function POSPage() {
                 <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
                   {cart.map((item) => (
                     <div key={item.id} className="flex justify-between text-sm items-center">
-                      <div className="flex flex-col flex-1 min-w-0">
+                    <div className="flex flex-col flex-1 min-w-0">
                         <span className="truncate font-medium">
                           {item.icon} {item.name}
                         </span>
                         <span className="text-xs text-slate-400">
-                          {item.qty} x ฿{item.price.toLocaleString()}
+                          {item.qty} x ฿{Number(item.price).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 ml-3">
@@ -296,7 +303,7 @@ export default function POSPage() {
                         </button>
                         <span className="w-6 text-center font-medium">{item.qty}</span>
                         <button
-                          onClick={() => addToCart({ id: item.id, name: item.name, icon: item.icon } as Category)}
+                          onClick={() => addToCart({ id: item.id, name: item.name, icon: item.icon, price: item.price } as Category)}
                           className="w-6 h-6 flex items-center justify-center rounded bg-slate-100 hover:bg-slate-200"
                         >
                           <Plus className="w-3 h-3" />
@@ -321,6 +328,13 @@ export default function POSPage() {
                   >
                     <CheckCircle className="w-4 h-4" />
                     ชำระเงิน
+                  </button>
+                  <button
+                    onClick={handleQuotation}
+                    className="w-full mt-2 bg-amber-500 text-white py-2.5 rounded-lg font-medium hover:bg-amber-600 transition flex items-center justify-center gap-2 shadow-sm"
+                  >
+                    <FileText className="w-4 h-4" />
+                     ใบเสนอราคา (ให้ลูกค้าดูก่อน)
                   </button>
                   <button
                     onClick={() => {

@@ -1,323 +1,566 @@
-# 🏍️ ระบบจัดการอะไหล่ร้านซ่อมมอเตอร์ไซค์ (Motorcycle Parts Shop)
+# 🏍️ Motorcycle Parts Shop — ระบบจัดการร้านอะไหล่มอเตอร์ไซค์
 
-ระบบ Web Application สำหรับจัดการหมวดหมู่อะไหล่ร้านซ่อมมอเตอร์ไซค์ แยกสิทธิ์การใช้งานระหว่างเจ้าของร้านและพนักงาน
+> ระบบ POS (Point of Sale) และจัดการหมวดหมู่อะไหล่มอเตอร์ไซค์ สำหรับพนักงานใช้งานภายในร้าน
 
-> 🟢 **สถานะระบบ:** อัปเดตล่าสุดพร้อมใช้งาน (ระบบหน้าร้าน Store & ระบบคำนวณราคา Price พร้อมใช้งาน)
+![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.104-009688?logo=fastapi)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql)
+![Docker](https://img.shields.io/badge/Docker-required-2496ED?logo=docker)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)
 
 ---
 
 ## 📋 สารบัญ
 
-- [Tech Stack](#-tech-stack)
-- [โครงสร้างโปรเจกต์](#-โครงสร้างโปรเจกต์)
-- [ความต้องการของระบบ](#-ความต้องการของระบบ)
-- [การติดตั้งครั้งแรก](#-การติดตั้งครั้งแรก)
-- [การเปิดระบบ](#-การเปิดระบบ)
-- [การปิดระบบ](#-การปิดระบบ)
-- [ข้อมูล Login](#-ข้อมูล-login)
-- [API Endpoints](#-api-endpoints)
-- [การแก้ปัญหาเบื้องต้น](#-การแก้ปัญหาเบื้องต้น)
-- [📝 Changelog](#-changelog)
+- [ภาพรวมระบบ](#ภาพรวมระบบ)
+- [ระบบทำงานอย่างไร](#ระบบทำงานอย่างไร)
+- [โครงสร้างโปรเจค](#โครงสร้างโปรเจค)
+- [ความต้องการของระบบ](#ความต้องการของระบบ)
+- [วิธีติดตั้ง](#วิธีติดตั้ง)
+- [วิธีเริ่มใช้งาน](#วิธีเริ่มใช้งาน)
+- [บัญชีผู้ใช้เริ่มต้น](#บัญชีผู้ใช้เริ่มต้น)
+- [หน้าต่างๆ ในระบบ](#หน้าต่างๆ-ในระบบ)
+- [API Endpoints](#api-endpoints)
+- [การแก้ปัญหาที่พบบ่อย](#การแก้ปัญหาที่พบบ่อย)
+- [Tech Stack](#tech-stack)
 
 ---
 
-## 📝 Changelog
+## ภาพรวมระบบ
 
-### v1.2.0 — 2026-10-10
+ระบบนี้ถูกพัฒนาขึ้นเพื่อใช้ภายในร้านซ่อมและขายอะไหล่มอเตอร์ไซค์ ประกอบด้วย:
 
-#### ✨ เพิ่มใหม่
-
-| รายการ | รายละเอียด |
+| ฟีเจอร์ | รายละเอียด |
 |---|---|
-| **หน้าจัดการลูกจ้าง (`/dashboard/Employee`)** | หน้ากำหนดค่าแรงรายวันของลูกจ้างแต่ละคน (เข้าถึงได้เฉพาะเจ้าของร้าน) พร้อมแสดงยอดขายและจำนวนบิลที่ออกในแต่ละวัน |
-| **ปุ่ม "+ เพิ่มลูกจ้าง" และ Modal** | ให้เจ้าของร้านสร้างบัญชีผู้ใช้ลูกจ้างใหม่ พร้อมกำหนดค่าแรงรายวันเริ่มต้นและหมายเหตุได้ทันที |
-| **แก้ไขค่าแรงรายวันได้คนเดียว** | เจ้าของร้านสามารถกด "แก้ไขค่าแรง" ของลูกจ้างแต่ละคนได้แบบ Inline |
-| **Dropdown เลือกพนักงานในหน้า Payment** | หน้าชำระเงินมี Dropdown ให้เลือกว่าใครเป็นคนออกบิลนี้ (บังคับเลือกก่อนชำระเงิน) |
-| **บันทึกประวัติการขายผูกกับลูกจ้าง** | เมื่อชำระเงินเสร็จสิ้น ระบบจะบันทึกลงตาราง `sale_records` ผูกกับ `employee_id` อัตโนมัติ |
-| **Modal ดูประวัติการขายย้อนหลัง** | ในหน้าลูกจ้าง สามารถกดดูประวัติการขายของแต่ละคน พร้อมตัวกรองเลือกช่วงวันที่และแสดงยอดขายรวมได้ |
-| **แก้ไขข้อมูลลูกจ้าง (`PUT /api/employees/{id}`)** | เจ้าของร้านสามารถแก้ไขชื่อ-นามสกุล, Username, รหัสผ่านใหม่, ค่าแรงรายวัน, หมายเหตุ และสถานะเปิด/ปิดใช้งานได้ |
-| **ลบลูกจ้าง (`DELETE /api/employees/{id}`)** | เจ้าของร้านสามารถลบบัญชีลูกจ้างพร้อมเคลียร์ข้อมูลที่เกี่ยวข้องได้ (ป้องกันไม่ให้ลบบัญชีเจ้าของร้าน) |
-| **ความปลอดภัยเฉพาะเจ้าของร้าน** | การเพิ่ม, แก้ไข, ลบข้อมูลลูกจ้างถูกล็อคสิทธิ์ด้วย `require_owner` สิทธิ์ของ `owner` เท่านั้น |
-| **เมนู Sidebar "👥 จัดการลูกจ้าง"** | แสดงเมนูเฉพาะผู้ใช้ที่มีสิทธิ์เป็นเจ้าของร้าน (`owner`) เท่านั้น |
+| 🔐 **ระบบล็อกอิน** | JWT Authentication พร้อมแยก Role (เจ้าของ / พนักงาน) |
+| 🗂️ **จัดการหมวดหมู่** | สร้าง/แก้ไข/ลบหมวดหมู่อะไหล่ 3 ระดับ (หลัก → ย่อย → ประเภท) พร้อมราคาสินค้า |
+| 🛒 **หน้าร้าน POS** | เลือกสินค้าเข้าตะกร้า ค้นหา กรองประเภท ดูราคา |
+| 💳 **ชำระเงิน Multi-step** | ตรวจสอบรายการ → ข้อมูลรถ/ลูกค้า → เลือกพนักงานผู้ออกบิล → ช่องทางชำระ → ยืนยัน |
+| 👥 **จัดการลูกจ้าง & ค่าแรง** | จัดการข้อมูลพนักงาน กำหนดค่าแรงรายวัน ดูสถิติยอดขายและประวัติการขาย (เฉพาะเจ้าของร้าน) |
+| 🧾 **ประวัติการขาย** | บันทึกประวัติการขายผูกกับพนักงานผู้ออกบิล ดูรายงานย้อนหลังตามช่วงวันที่ |
+| 🖨️ **ใบเสร็จ** | สร้างใบเสร็จจากรายการขายที่บันทึกสำเร็จ และพิมพ์หรือบันทึกเป็น PDF ผ่านเบราว์เซอร์ |
 
----
+## ระบบทำงานอย่างไร
 
-### v1.1.0 — 2026-10-03
+ระบบแบ่งเป็น 3 ส่วนหลัก:
 
-#### ✨ เพิ่มใหม่
+1. **Frontend (`frontend/`)** — Next.js App Router แสดงหน้าเว็บและจัดการสถานะหน้าจอ ใช้ `AuthContext` เก็บข้อมูลผู้ใช้ที่ล็อกอิน และ Axios ใน `src/lib/api.ts` เรียก Backend โดยแนบ JWT
+2. **Backend (`backend/`)** — FastAPI ให้ REST API; Routers ตรวจสิทธิ์และรับส่งข้อมูล, Schemas ตรวจรูปแบบข้อมูล, Services จัดการ business logic และ SQLAlchemy Models กำหนดตาราง
+3. **Database (`docker-compose.yml`)** — PostgreSQL เก็บผู้ใช้ หมวดหมู่อะไหล่ ค่าแรง และประวัติการขาย; pgAdmin ใช้ตรวจสอบฐานข้อมูลผ่านเว็บ
 
-| รายการ | รายละเอียด |
-|---|---|
-| **Field `price` ในตาราง `categories`** | เพิ่ม column `price NUMERIC(10,2) DEFAULT 0.00` ใน PostgreSQL |
-| **ฟิลด์ราคาใน CategoryForm** | เจ้าของร้านสามารถกรอก/แก้ไขราคาสินค้าได้ผ่าน Dashboard → Categories → Edit |
-| **แสดงราคาบนการ์ดสินค้า (Store)** | หน้า Store แสดงราคาแต่ละรายการ หากยังไม่ตั้งราคาจะแสดง "ยังไม่มีราคา" |
-| **คำนวณยอดรวมอัตโนมัติ (Store)** | ตะกร้าสินค้าดึง `price` จาก API มาคำนวณ `price × qty` ได้จริง |
-| **หน้า Store (`/dashboard/store`)** | หน้า POS หน้าร้าน ค้นหา/กรองสินค้า เพิ่มเข้าตะกร้า และชำระเงิน |
-| **หน้า Payment (`/dashboard/payment`)** | หน้าสรุปการชำระเงิน (เปิดต่อจาก Store) |
-| **Package `lucide-react`** | ติดตั้ง icon library สำหรับหน้า Store และ Payment |
+### วงจรการทำงานหลัก
 
-#### 🔧 แก้ไข / ปรับปรุง
+```text
+เปิดระบบ
+  └─ FastAPI สร้างตารางที่ยังไม่มี และ seed บัญชีเริ่มต้น/หมวดหมู่จาก data/categories.json
 
-| ไฟล์ | สิ่งที่เปลี่ยน |
-|---|---|
-| `backend/app/models/category.py` | เพิ่ม `price = Column(Numeric(10, 2), default=0.00)` |
-| `backend/app/schemas/category.py` | เพิ่ม `price: float` ใน `CategoryBase`, `CategoryUpdate`, `CategoryResponse` |
-| `frontend/src/types/category.ts` | เพิ่ม `price: number` ใน `Category` และ `CategoryFormData` |
-| `frontend/src/components/categories/CategoryForm.tsx` | เพิ่ม input ราคา (฿) + reset form เมื่อเปิด modal ใหม่ |
-| `frontend/src/app/dashboard/store/page.tsx` | ดึง `cat.price` จาก API แทน hardcode `0` + แสดงราคาบนการ์ด |
-| `README.md` | อัปเดต path ของโปรเจกต์จาก `New folder` → `work` |
+เข้าสู่ระบบ
+  └─ Frontend ขอ JWT → เก็บ token ใน localStorage → แนบ token ไปกับ API request
 
-#### 🗄️ Database Migration
-
-```sql
--- รัน 1 ครั้งเมื่อ upgrade จาก v1.0 → v1.1
-ALTER TABLE categories ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) NOT NULL DEFAULT 0.00;
+ขายสินค้า
+  └─ เลือกสินค้า → เก็บตะกร้าใน localStorage (pos_cart)
+      ├─ ใบเสนอราคา: คำนวณและพิมพ์จาก Frontend; ไม่สร้างประวัติการขาย
+      └─ ชำระเงินจริง: ส่งรายการและข้อมูลบิลไป POST /api/employees/sales
+          └─ Backend บันทึก SaleRecord ใน PostgreSQL → Frontend แสดงใบเสร็จ
+              └─ หน้ารายงาน/จัดการลูกจ้างอ่านประวัติจาก API
 ```
 
-> **หมายเหตุ:** หากติดตั้งใหม่ตั้งแต่ต้น (`docker compose up -d` + `python -m uvicorn`) ระบบจะสร้าง column `price` ให้อัตโนมัติผ่าน SQLAlchemy `create_all()`
+### สิทธิ์และขอบเขตข้อมูล
+
+- เจ้าของร้าน (`owner`) จัดการหมวดหมู่และบัญชีลูกจ้าง กำหนดค่าแรง และดูรายงานการขายทั้งหมดได้
+- พนักงาน (`employee`) ใช้หน้าร้านและบันทึกการขายได้; API ประวัติการขายจำกัดให้พนักงานดูเฉพาะรายการของตน
+- หน้า Dashboard ฝั่ง Frontend ต้องล็อกอินก่อนใช้งาน แต่ API อ่านหมวดหมู่ (`GET /api/categories`) เปิดให้อ่านได้โดยไม่ต้องมี JWT; การเพิ่ม แก้ไข และลบหมวดหมู่ต้องเป็นเจ้าของร้าน
+- ใบเสนอราคาเป็นเอกสารประเมินราคา ไม่ใช่รายการขายจริง; ระบบปัจจุบันยังไม่มีการเคลื่อนไหว/ตัดสต็อกสินค้า
+- ใบเสร็จหลังชำระเงินใช้ข้อมูลการขายที่บันทึกสำเร็จ ส่วนการพิมพ์ใช้ print stylesheet และคำสั่งพิมพ์/PDF ของเบราว์เซอร์
+
+> ตอนเริ่ม Backend ใช้ `Base.metadata.create_all()` เพื่อสร้างตารางที่ยังไม่มี ไม่ได้ปรับโครงสร้างตารางเดิมโดยอัตโนมัติเมื่อมีการเปลี่ยน Model; การเปลี่ยน Schema ฐานข้อมูลต้องวางแผน migration หรือปรับฐานข้อมูลตามขั้นตอนของทีม
 
 ---
 
-### v1.0.0 — เวอร์ชันเริ่มต้น
-
-- ระบบจัดการหมวดหมู่อะไหล่ (Categories CRUD)
-- ระบบ Login ด้วย JWT แยก role `owner` / `employee`
-- Frontend: Next.js 14, Backend: FastAPI, Database: PostgreSQL (Docker)
-
----
-
-## 🛠 Tech Stack
-
-| Layer | Technology |
-|---|---|
-| **Frontend** | Next.js 14, React 18, TypeScript, Tailwind CSS, Axios |
-| **Backend** | Python FastAPI, SQLAlchemy 2.0, Alembic, JWT Auth |
-| **Database** | PostgreSQL 16 (Docker) |
-| **DB Admin** | pgAdmin 4 (Docker) |
-
----
-
-## 📁 โครงสร้างโปรเจกต์
+## โครงสร้างโปรเจค
 
 ```
-prototype_Motorcycle_Repair-main/
-├── backend/                    # FastAPI Backend
+motorcycle-parts-shop/
+│
+├── 📁 backend/                    # FastAPI Backend
 │   ├── app/
-│   │   ├── middleware/         # Auth middleware (JWT)
-│   │   ├── models/             # SQLAlchemy ORM models
-│   │   │   ├── user.py         # User model
-│   │   │   └── category.py     # Category model (รองรับ parent-child)
-│   │   ├── routers/            # API route handlers
-│   │   │   ├── auth.py         # /api/auth/*
-│   │   │   └── categories.py   # /api/categories/*
-│   │   ├── schemas/            # Pydantic schemas
-│   │   ├── services/           # Business logic
-│   │   ├── config.py           # Settings จาก .env
-│   │   ├── database.py         # DB connection
-│   │   └── main.py             # FastAPI app entry point
-│   ├── .env                    # Environment variables (ต้องสร้างเอง)
-│   └── requirements.txt        # Python dependencies
-├── frontend/                   # Next.js Frontend
+│   │   ├── main.py                # สร้างตาราง, seed ข้อมูล, รวม routers
+│   │   ├── config.py              # อ่าน settings จาก environment / .env
+│   │   ├── database.py            # SQLAlchemy engine, Base และ DB session
+│   │   ├── models/
+│   │   │   ├── category.py        # หมวดหมู่แบบ parent/child และราคา
+│   │   │   ├── employee.py        # ค่าแรงและประวัติการขาย
+│   │   │   └── user.py            # บัญชีผู้ใช้และ role
+│   │   ├── schemas/
+│   │   │   ├── category.py        # ตรวจข้อมูลหมวดหมู่
+│   │   │   ├── employee.py        # ตรวจข้อมูลค่าแรง/การขาย/รายงาน
+│   │   │   └── user.py            # ตรวจข้อมูลบัญชีและ token
+│   │   ├── services/
+│   │   │   ├── auth_service.py    # ตรวจรหัสผ่านและสร้างผู้ใช้
+│   │   │   ├── category_service.py # CRUD, ค้นหา และ seed หมวดหมู่
+│   │   │   └── employee_service.py # ค่าแรง ประวัติขาย และสรุปรายงาน
+│   │   ├── routers/
+│   │   │   ├── auth.py            # Login, current user, owner register
+│   │   │   ├── categories.py      # CRUD /api/categories
+│   │   │   └── employees.py       # พนักงาน ค่าแรง การขาย และรายงาน
+│   │   └── middleware/
+│   │       └── auth.py            # JWT verify, role guard
+│   ├── requirements.txt
+│   └── .env                       # ตั้งค่าท้องถิ่น (ไม่ควร commit)
+│
+├── 📁 frontend/                   # Next.js 14 Frontend
 │   └── src/
-│       ├── app/                # Next.js App Router
-│       │   ├── login/          # หน้า Login
-│       │   └── dashboard/      # หน้า Dashboard + Categories
-│       ├── components/         # UI Components
-│       ├── context/            # Auth Context
-│       ├── hooks/              # Custom hooks
-│       ├── lib/                # API client
-│       └── types/              # TypeScript types
-├── data/
-│   └── categories.json         # Seed data สำหรับหมวดหมู่
-├── docker-compose.yml          # PostgreSQL + pgAdmin
-└── README.md
+│       ├── app/
+│       │   ├── page.tsx           # หน้าเริ่มต้น
+│       │   ├── login/page.tsx     # หน้าล็อกอิน
+│       │   ├── globals.css        # Tailwind และ print styles
+│       │   └── dashboard/
+│       │       ├── layout.tsx     # Layout พร้อม Sidebar + Header
+│       │       ├── page.tsx       # หน้า Dashboard หลัก
+│       │       ├── categories/    # จัดการหมวดหมู่
+│       │       ├── store/         # หน้าร้าน POS และตะกร้า
+│       │       ├── quotation/     # ใบเสนอราคาและพิมพ์/PDF
+│       │       ├── payment/       # ชำระเงินและใบเสร็จ
+│       │       ├── Employee/      # จัดการลูกจ้าง (Owner)
+│       │       └── reports/       # รายงานและรายละเอียดบิล (Owner)
+│       ├── components/
+│       │   ├── auth/              # LoginForm, ProtectedRoute
+│       │   ├── categories/        # CategoryList, CategoryForm, etc.
+│       │   ├── layout/            # Sidebar, Header
+│       │   └── ui/                # Button, Modal, Table, Badge, Input
+│       ├── context/               # AuthContext: ผู้ใช้และสถานะล็อกอิน
+│       ├── hooks/                 # useAuth, useCategories
+│       ├── lib/                   # Axios API client และ token helpers
+│       └── types/                 # TypeScript types ของ auth, categories, employees
+│
+├── 📁 data/                       # Seed Data (JSON)
+│   ├── categories.json            # หมวดหมู่ที่ Backend seed ตอนเริ่มระบบ
+│   ├── users_seed.json            # ข้อมูลผู้ใช้ประกอบ (ไม่ได้อ่านโดย startup ปัจจุบัน)
+│   └── parts_*.json               # ข้อมูลอะไหล่แยกประเภทสำหรับข้อมูลประกอบ
+│
+├── docker-compose.yml             # PostgreSQL + pgAdmin
+├── start_backend.bat              # 🚀 สคริปต์เริ่ม backend (Windows)
+├── update_data.py                 # สคริปต์จัดการข้อมูลหมวดหมู่
+└── .gitignore
 ```
 
 ---
 
-## 💻 ความต้องการของระบบ
+## ความต้องการของระบบ
 
-ก่อนเริ่มต้นต้องติดตั้งโปรแกรมเหล่านี้ให้ครบ:
-
-| โปรแกรม | เวอร์ชันที่แนะนำ | ดาวน์โหลด |
+| เครื่องมือ | เวอร์ชันขั้นต่ำ | หมายเหตุ |
 |---|---|---|
-| **Docker Desktop** | ล่าสุด | [docker.com](https://www.docker.com/products/docker-desktop/) |
-| **Python** | 3.12+ | [python.org](https://www.python.org/downloads/) |
-| **Node.js** | 18 LTS+ | [nodejs.org](https://nodejs.org/) |
+| **Node.js** | 18.x ขึ้นไป | ใช้สำหรับ Next.js frontend |
+| **Python** | 3.11 ขึ้นไป | ใช้สำหรับ FastAPI backend |
+| **Docker Desktop** | ล่าสุด | ใช้รัน PostgreSQL database |
+| **Git** | ล่าสุด | สำหรับ clone โปรเจค |
 
-> ⚠️ หลังติดตั้ง Python หรือ Node.js ใหม่ ให้ **ปิดแล้วเปิด Terminal ใหม่** เสมอ เพื่อให้ PATH อัปเดต
+> ✅ **ทดสอบบน Windows 10/11** — ใช้ PowerShell หรือ Command Prompt
 
 ---
 
-## 🚀 การติดตั้งครั้งแรก
+## วิธีติดตั้ง
 
-> ทำเพียงครั้งเดียวเท่านั้น ครั้งถัดไปข้ามไปที่ [การเปิดระบบ](#-การเปิดระบบ) ได้เลย
+### ขั้นที่ 1 — Clone โปรเจค
 
-### ขั้นตอนที่ 1 — สร้างไฟล์ .env สำหรับ Backend
-
-สร้างไฟล์ `backend/.env` แล้วใส่ข้อมูลนี้:
-
-```env
-DATABASE_URL=postgresql://postgres:postgres123@localhost:5432/motorcycle_parts_db
-SECRET_KEY=supersecretkey_motorcycle_shop_2024
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=60
+```bash
+git clone https://github.com/gtx550000/prototype_Motorcycle_Repair.git
+cd prototype_Motorcycle_Repair
 ```
 
-### ขั้นตอนที่ 2 — ติดตั้ง Python packages
+---
+
+### ขั้นที่ 2 — ติดตั้ง Python Virtual Environment (Backend)
 
 ```powershell
-cd backend
-pip install bcrypt==4.0.1 -r requirements.txt
+# สร้าง virtual environment ที่ root ของโปรเจค
+python -m venv .venv
+
+# เปิดใช้งาน
+.venv\Scripts\activate
+
+# ติดตั้ง dependencies
+pip install -r backend\requirements.txt
+
+# ⚠️ สำคัญ: ต้องใช้ bcrypt เวอร์ชัน 4.0.1 เท่านั้น
+pip install bcrypt==4.0.1
 ```
 
-### ขั้นตอนที่ 3 — ติดตั้ง Node.js packages
+---
+
+### ขั้นที่ 3 — ติดตั้ง Node.js Dependencies (Frontend)
 
 ```powershell
 cd frontend
 npm install
+cd ..
 ```
 
 ---
 
-## ▶️ การเปิดระบบ
+### ขั้นที่ 4 — ตั้งค่า Environment Variables
 
-ต้องเปิดตามลำดับ **3 ขั้นตอน** ใน Terminal แยกกัน:
+สร้างไฟล์ `backend/.env` สำหรับเครื่องพัฒนา โดยใช้ URL ฐานข้อมูลที่ตรงกับ PostgreSQL ใน `docker-compose.yml`:
 
-### ขั้นตอนที่ 1 — เปิด Docker Desktop
-
-เปิดแอป **Docker Desktop** จาก Start Menu แล้วรอจนไอคอนที่ System Tray (มุมขวาล่าง) เป็น **สีเขียว**
-
-### ขั้นตอนที่ 2 — เปิด Database (Terminal ที่ 1)
-
-```powershell
-cd "C:\Users\salan\Desktop\work\prototype_Motorcycle_Repair-main"
-docker compose up -d
+```env
+DATABASE_URL=postgresql://<user>:<password>@localhost:5432/motorcycle_parts_db
+SECRET_KEY=<random-long-secret>
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=480
 ```
 
-> ✅ สำเร็จ = ขึ้น `Container motorcycle-postgres Started`
+> 🔒 ห้ามนำ `.env` หรือ secret จริงขึ้น Git; สำหรับ Production ให้กำหนด `SECRET_KEY` แบบสุ่มและเก็บใน environment/secret manager ของระบบ
 
-### ขั้นตอนที่ 3 — เปิด Backend API (Terminal ที่ 2)
+---
+
+## วิธีเริ่มใช้งาน
+
+### 🚀 วิธีเร็ว (แนะนำสำหรับ Windows)
+
+ดับเบิ้ลคลิกที่ไฟล์ **`start_backend.bat`** ที่ root ของโปรเจค — มันจะทำทุกอย่างให้อัตโนมัติ:
+1. ปิด process เก่าที่ port 8000
+2. เริ่ม Docker (PostgreSQL)
+3. รัน Backend server
+
+จากนั้นรัน Frontend แยก:
 
 ```powershell
-cd "C:\Users\salan\Desktop\work\prototype_Motorcycle_Repair-main\backend"
-python -m uvicorn app.main:app --reload
-```
-
-> ✅ สำเร็จ = ขึ้น `Application startup complete.`
-> API ทำงานที่ **http://localhost:8000**
-
-### ขั้นตอนที่ 4 — เปิด Frontend (Terminal ที่ 3)
-
-```powershell
-cd "C:\Users\salan\Desktop\work\prototype_Motorcycle_Repair-main\frontend"
+cd frontend
 npm run dev
 ```
 
-> ✅ สำเร็จ = ขึ้น `Ready on http://localhost:3000`
-
-### เปิดเว็บใช้งาน 🌐
-
-| URL | คำอธิบาย |
-|---|---|
-| **http://localhost:3000** | หน้าเว็บหลัก (Frontend) |
-| **http://localhost:8000/docs** | API Docs (Swagger UI) |
-| **http://localhost:5050** | pgAdmin (จัดการ Database) |
-
 ---
 
-## ⏹️ การปิดระบบ
+### 🛠️ วิธีทีละขั้น (Manual)
 
-| ส่วน | วิธีปิด |
-|---|---|
-| **Frontend** | กด `Ctrl + C` ใน Terminal ที่ 3 |
-| **Backend** | กด `Ctrl + C` ใน Terminal ที่ 2 |
-| **Database** | รันคำสั่ง `docker compose down` ใน Terminal ที่ 1 |
+**Terminal 1 — เริ่ม Database (Docker)**
 
 ```powershell
-# ปิด Database (รันใน root folder ของโปรเจกต์)
-cd "C:\Users\salan\Desktop\work\prototype_Motorcycle_Repair-main"
-docker compose down
+docker compose up -d
+```
+
+รอจนกว่า PostgreSQL พร้อม (ประมาณ 10-15 วินาที):
+
+```powershell
+# ตรวจสอบสถานะ
+docker compose ps
 ```
 
 ---
 
-## 🔐 ข้อมูล Login
+**Terminal 2 — เริ่ม Backend (FastAPI)**
 
-| บทบาท | Username | Password | สิทธิ์การใช้งาน |
-|---|---|---|---|
-| 🔑 **เจ้าของร้าน** | `admin` | `admin123` | ดู + เพิ่ม / แก้ไข / ลบ หมวดหมู่ |
-| 👷 **พนักงาน** | `staff01` | `staff123` | ดูข้อมูลอย่างเดียว |
+```powershell
+# เปิด virtual environment
+.venv\Scripts\activate
 
-> ระบบใช้ **JWT Token** ในการยืนยันตัวตน Token มีอายุ 60 นาที
+# เข้าโฟลเดอร์ backend
+cd backend
+
+# รัน server (port 8000)
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+เมื่อ backend พร้อมจะเห็น:
+```
+INFO:     Uvicorn running on http://0.0.0.0:8000
+INFO:     Application startup complete.
+```
+
+> 🌱 ระบบจะ **seed ข้อมูล 96 หมวดหมู่** และ **2 บัญชีผู้ใช้** โดยอัตโนมัติเมื่อเริ่มครั้งแรก
 
 ---
 
-## 📡 API Endpoints
+**Terminal 3 — เริ่ม Frontend (Next.js)**
+
+```powershell
+cd frontend
+npm run dev
+```
+
+เมื่อ frontend พร้อมจะเห็น:
+```
+▲ Next.js 14.2.3
+- Local: http://localhost:3000
+```
+
+---
+
+### ✅ ตรวจสอบว่าทุกอย่างทำงานได้
+
+| บริการ | URL | ผลที่ควรเห็น |
+|---|---|---|
+| **Frontend** | http://localhost:3000 | หน้าล็อกอิน |
+| **Backend API** | http://localhost:8000/docs | Swagger UI |
+| **pgAdmin** (DB GUI) | http://localhost:5050 | หน้า pgAdmin |
+
+---
+
+## บัญชีผู้ใช้เริ่มต้น
+
+| บทบาท | Username | Password | สิทธิ์ |
+|---|---|---|---|
+| 🔑 **เจ้าของร้าน** | `admin` | `admin123` | จัดการทุกอย่าง, สร้างพนักงาน |
+| 👤 **พนักงาน** | `staff01` | `staff123` | ใช้หน้าร้าน POS, ชำระเงิน |
+
+---
+
+## หน้าต่างๆ ในระบบ
+
+### 🔐 หน้าล็อกอิน — `/login`
+- กรอก username / password แล้วกด **"เข้าสู่ระบบ"**
+- ระบบจะ redirect ไปหน้า Dashboard อัตโนมัติ
+
+---
+
+### 📊 หน้า Dashboard — `/dashboard`
+- แสดงข้อมูลสรุปภาพรวมร้านค้า
+- แสดงชื่อผู้ใช้ที่ล็อกอินอยู่
+
+---
+
+### 🗂️ หน้าจัดการหมวดหมู่ — `/dashboard/categories`
+- ดูรายการหมวดหมู่ทั้งหมด 96 รายการ
+- **กรองตามประเภท:** ทั้งหมด / หมวดหมู่หลัก / หมวดหมู่ย่อย / ประเภทอะไหล่
+- **ค้นหา:** ค้นได้ทั้งภาษาไทย ภาษาอังกฤษ และรหัสอ้างอิง
+- **เพิ่ม/แก้ไข/ลบ** หมวดหมู่ (เฉพาะ role = owner)
+
+**โครงสร้างหมวดหมู่ 3 ระดับ:**
+```
+หมวดหมู่หลัก (CAT001-CAT005)
+  └── หมวดหมู่ย่อย (SUB001-SUB019)
+        └── ประเภทอะไหล่ (PT001-PT073)
+```
+
+---
+
+### 🛒 หน้าร้าน POS — `/dashboard/store`
+- ค้นหาและเลือกอะไหล่จากรายการ
+- กรองประเภทสินค้า (ทั้งหมด / หมวดหลัก / หมวดย่อย / ประเภท)
+- **เพิ่ม/ลด/ลบ** สินค้าในตะกร้า
+- แสดงราคาสินค้าและยอดรวม
+- ✅ **ตะกร้าถูกบันทึกไว้** แม้เปลี่ยนหน้าหรือกดย้อนกลับจากหน้าชำระเงิน
+- กด **"ชำระเงิน"** เพื่อไปหน้า Multi-step Checkout
+- กด **"📄 ใบเสนอราคา"** เพื่อเปิดหน้าประเมินราคาก่อนตัดสินใจซื้อ (ไม่ตัดสต็อก)
+
+---
+
+### 📄 หน้าใบเสนอราคา — `/dashboard/quotation`
+- **ประเมินราคาล่วงหน้า**: ให้ลูกค้าทราบราคาก่อนตัดสินใจซ่อม/ซื้อจริง โดยยังไม่ต้องออกบิลขายจริงและ**ไม่ตัดสต็อก**
+- **ตัวเลือกคำนวณราคา**:
+  - 🔘 **ราคารวม ปกติ**: คำนวณเฉพาะค่าอะไหล่ตามตะกร้า
+  - 🔘 **ราคารวมค่าช่าง**: กรอกค่าแรงช่าง/ค่าบริการ พร้อมระบุรายละเอียดงานช่าง เพื่อรวมในยอดสุทธิอย่างชัดเจน
+  - 🏷️ **ส่วนลดพิเศษ**: กำหนดส่วนลดเพิ่มเติมได้
+- **ข้อมูลลูกค้า & รถ**: กรอกชื่อลูกค้า, เบอร์โทร, ทะเบียนรถ, รุ่นรถ, กำหนดอายุใบเสนอราคา
+- **ออกไฟล์ PDF & สั่งพิมพ์**: มีปุ่มสั่งพิมพ์หรือบันทึกเป็นไฟล์ PDF ตามมาตรฐานกระดาษ A4 สวยงาม พร้อมช่องลงนามผู้เสนอราคาและลูกค้ายินยอม
+- **เชื่อมต่อกับระบบขาย**: หากลูกค้าตกลง สามารถกดปุ่ม **"ไปหน้าชำระเงิน"** เพื่อดำเนินการออกบิลจริงได้ทันที
+
+---
+
+### 💳 หน้าชำระเงิน — `/dashboard/payment`
+
+มี 4 ขั้นตอน:
+
+| ขั้นที่ | หัวข้อ | รายละเอียด |
+|---|---|---|
+| 1️⃣ | สรุปรายการ | ตรวจสอบอะไหล่และยอดรวม |
+| 2️⃣ | ข้อมูลรถ/ลูกค้า | ทะเบียน, รุ่นรถ, ชื่อลูกค้า (ไม่บังคับ) |
+| 3️⃣ | ชำระเงิน | เงินสด (คำนวณทอน) / โอน-QR / บัตรเครดิต |
+| 4️⃣ | เสร็จสิ้น | ใบเสร็จแสดงเลขที่บิล วันที่ เวลา ลูกค้า/รถ พนักงาน รายการสินค้า ช่องทางชำระเงิน และยอดเงิน; พิมพ์หรือบันทึกเป็น PDF ได้ |
+
+> ตะกร้าจะถูกล้างเฉพาะเมื่อกด **"ยืนยันการชำระเงิน"** เท่านั้น
+
+---
+
+### 👥 หน้าจัดการลูกจ้าง — `/dashboard/Employee` (เฉพาะเจ้าของร้าน)
+- **จัดการข้อมูลลูกจ้าง**: เพิ่มบัญชีลูกจ้างใหม่, แก้ไขข้อมูล (ชื่อ, username, รหัสผ่าน, สถานะการใช้งาน) และลบลูกจ้าง
+- **กำหนดค่าแรงรายวัน**: ตั้งค่าและแก้ไขค่าแรงรายวันของพนักงานแต่ละคน พร้อมบันทึกหมายเหตุ
+- **สถิติรายวัน**: แสดงยอดขายรวมและจำนวนบิลที่ลูกจ้างแต่ละคนทำได้ในวันที่เลือก
+- **ดูประวัติการขายย้อนหลัง**: มี Modal ดูรายละเอียดบิลย้อนหลังของลูกจ้าง พร้อมตัวกรองช่วงวันที่ (วันเริ่มต้น - วันสิ้นสุด)
+
+---
+
+### 📈 หน้าระบบรายงานการขาย — `/dashboard/reports` (เฉพาะเจ้าของร้าน)
+- **ตัวเลือกช่วงเวลา**: ดูยอดขายแบบรายวัน (วันนี้ / เมื่อวาน), รายสัปดาห์ (สัปดาห์นี้ / สัปดาห์ก่อน), รายเดือน หรือกำหนดช่วงวันเอง
+- **สรุปตามพนักงาน**: ดูว่าพนักงานแต่ละคนขายไปแล้วกี่บิล, **ขายไปแล้วกี่ชิ้น**, และยอดขายรวมกี่บาท
+- **สินค้าที่ขายไป (Breakdown)**: กดดูได้ว่าพนักงานคนนั้น **ขายอะไรไปบ้างและขายไปกี่ชิ้น**
+- **จัดอันดับสินค้าขายดี**: ตารางสรุปสินค้าที่ขายได้ทั้งหมดในช่วงเวลาที่เลือก เรียงลำดับตามจำนวนชิ้น
+- **ประวัติบิลละเอียด**: ตารางดูประวัติบิลทุกใบ พร้อมเปิดดูใบเสร็จและรายการอะไหล่ในบิล
+
+---
+
+## API Endpoints
+
+เปิด Swagger UI ได้ที่ http://localhost:8000/docs
 
 ### Auth
 
-| Method | Endpoint | คำอธิบาย | สิทธิ์ |
+| Method | Endpoint | คำอธิบาย | Auth |
 |---|---|---|---|
-| `POST` | `/api/auth/login` | เข้าสู่ระบบ | ทุกคน |
-| `GET` | `/api/auth/me` | ดูข้อมูลตัวเอง | ต้อง Login |
-| `POST` | `/api/auth/register` | สร้างผู้ใช้ใหม่ | เจ้าของร้านเท่านั้น |
+| POST | `/api/auth/login` | ล็อกอิน (รับ JWT token) | ❌ |
+| GET | `/api/auth/me` | ดูข้อมูลผู้ใช้ปัจจุบัน | ✅ |
+| POST | `/api/auth/register` | สร้างบัญชีพนักงาน | ✅ Owner only |
 
-### Categories (หมวดหมู่อะไหล่)
+### Categories
 
-| Method | Endpoint | คำอธิบาย | สิทธิ์ |
+| Method | Endpoint | คำอธิบาย | Auth |
 |---|---|---|---|
-| `GET` | `/api/categories/` | ดูรายการหมวดหมู่ทั้งหมด (รองรับ pagination + search + filter) | ทุกคน |
-| `GET` | `/api/categories/{id}` | ดูหมวดหมู่ตาม ID | ทุกคน |
-| `POST` | `/api/categories/` | เพิ่มหมวดหมู่ใหม่ | เจ้าของร้านเท่านั้น |
-| `PUT` | `/api/categories/{id}` | แก้ไขหมวดหมู่ | เจ้าของร้านเท่านั้น |
-| `DELETE` | `/api/categories/{id}` | ลบหมวดหมู่ | เจ้าของร้านเท่านั้น |
+| GET | `/api/categories` | ดูรายการหมวดหมู่ (รองรับ search, filter, pagination) | ❌ |
+| POST | `/api/categories` | สร้างหมวดหมู่ใหม่ | ✅ Owner only |
+| GET | `/api/categories/{id}` | ดูหมวดหมู่รายการเดียว | ❌ |
+| PUT | `/api/categories/{id}` | แก้ไขหมวดหมู่ | ✅ Owner only |
+| DELETE | `/api/categories/{id}` | ลบหมวดหมู่ (ลบลูกด้วย) | ✅ Owner only |
 
-**Query Parameters สำหรับ GET /api/categories/:**
-- `page` — หน้าที่ต้องการ (default: 1)
-- `per_page` — จำนวนต่อหน้า (default: 10, max: 100)
-- `search` — ค้นหาจากชื่อ
-- `is_active` — กรองตามสถานะ (true/false)
-- `category_type` — กรองตามประเภท
+**Query Parameters สำหรับ GET /api/categories:**
+```
+?page=1&per_page=20&search=น้ำมัน&category_type=product
+```
+
+| Parameter | ค่าที่ใช้ได้ | คำอธิบาย |
+|---|---|---|
+| `search` | ข้อความใดก็ได้ | ค้นหาชื่อไทย/อังกฤษ/รหัส |
+| `category_type` | `main`, `sub`, `product` | กรองประเภท |
+| `page` | ตัวเลข | หน้าที่ต้องการ |
+| `per_page` | ตัวเลข | จำนวนต่อหน้า |
+
+### Employees & Sales Reports
+
+| Method | Endpoint | คำอธิบาย | Auth |
+|---|---|---|---|
+| GET | `/api/employees/` | รายชื่อลูกจ้าง + ค่าแรง + สถิติยอดขายตามวันที่ | ✅ Owner only |
+| GET | `/api/employees/list` | รายชื่อพนักงานแบบย่อสำหรับ Dropdown ในหน้าชำระเงิน | ✅ ทุกคน |
+| PUT | `/api/employees/{user_id}/wage` | ตั้งค่า/แก้ไขค่าแรงรายวัน | ✅ Owner only |
+| PUT | `/api/employees/{user_id}` | แก้ไขข้อมูลลูกจ้าง (ชื่อ, username, password, สถานะ, ค่าแรง) | ✅ Owner only |
+| DELETE | `/api/employees/{user_id}` | ลบบัญชีลูกจ้าง | ✅ Owner only |
+| POST | `/api/employees/sales` | บันทึกประวัติการขายเมื่อชำระเงินเสร็จสิ้น | ✅ ทุกคน |
+| GET | `/api/employees/sales` | ดูประวัติการขายย้อนหลัง (กรอง employee, ช่วงวันที่, pagination) | ✅ |
+| GET | `/api/employees/reports/sales` | สรุปรายงานการขาย (รายวัน/สัปดาห์, สินค้าที่ขาย, แยกตามพนักงาน) | ✅ Owner only |
 
 ---
 
-## 🗄️ โครงสร้าง Database
+## การแก้ปัญหาที่พบบ่อย
 
-### ตาราง `users`
-| Column | Type | คำอธิบาย |
-|---|---|---|
-| `id` | Integer | Primary Key |
-| `username` | String | ชื่อผู้ใช้ (unique) |
-| `full_name` | String | ชื่อ-นามสกุล |
-| `role` | String | `owner` หรือ `employee` |
-| `hashed_password` | String | รหัสผ่านที่เข้ารหัสด้วย bcrypt |
+### ❌ Login ไม่ได้ — Error 500
 
-### ตาราง `categories`
-| Column | Type | คำอธิบาย |
-|---|---|---|
-| `id` | Integer | Primary Key |
-| `name` | String | ชื่อหมวดหมู่ (ภาษาไทย) |
-| `name_en` | String | ชื่อหมวดหมู่ (ภาษาอังกฤษ) |
-| `description` | Text | คำอธิบาย |
-| `icon` | String | ไอคอน |
-| `parent_id` | Integer | FK → categories.id (รองรับหมวดหมู่ย่อย) |
-| `is_active` | Boolean | สถานะใช้งาน |
-| `sort_order` | Integer | ลำดับการแสดงผล |
-| `created_by` | Integer | FK → users.id |
+**สาเหตุ:** bcrypt เวอร์ชัน 5.x ไม่เข้ากัน
+
+```powershell
+.venv\Scripts\activate
+pip install bcrypt==4.0.1
+```
 
 ---
 
-## 🔧 การแก้ปัญหาเบื้องต้น
+### ❌ Port 8000 ถูกใช้งานอยู่แล้ว
 
-| ปัญหา | สาเหตุ | วิธีแก้ |
+```powershell
+# หา process ที่ใช้ port 8000
+Get-NetTCPConnection -LocalPort 8000
+
+# Kill ด้วย PID ที่ได้
+Stop-Process -Id <PID> -Force
+```
+
+หรือใช้ `start_backend.bat` ซึ่งทำให้อัตโนมัติ
+
+---
+
+### ❌ Docker ไม่ได้เปิด
+
+```powershell
+# เปิด Docker Desktop ก่อน แล้วรอ
+Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+Start-Sleep -Seconds 15
+docker compose up -d
+```
+
+---
+
+### ❌ ต้องการ reset ข้อมูลใหม่ทั้งหมด
+
+```powershell
+# หยุด Docker
+docker compose down -v
+
+# เริ่มใหม่
+docker compose up -d
+
+# รัน backend ใหม่ (จะ seed ข้อมูลให้อัตโนมัติ)
+```
+
+---
+
+### ❌ `npm run dev` ไม่ทำงาน
+
+```powershell
+cd frontend
+npm install   # ติดตั้ง dependencies ใหม่
+npm run dev
+```
+
+---
+
+## Tech Stack
+
+### Backend
+| เทคโนโลยี | เวอร์ชัน | บทบาท |
 |---|---|---|
-| `npm` หรือ `python` ไม่รู้จักคำสั่ง | ติดตั้งใหม่แต่ Terminal ยังเก่าอยู่ | ปิดแล้วเปิด Terminal ใหม่ |
-| `-m : The term '-m' is not recognized` | ลืมพิมพ์ `python` นำหน้า | ต้องพิมพ์ `python -m uvicorn ...` |
-| `Unable to connect to docker` | Docker Desktop ยังไม่เปิด | เปิด Docker Desktop รอจนไอคอนเป็นสีเขียว |
-| `Connection refused :8000` | Backend ยังไม่ได้เปิด | รัน `python -m uvicorn app.main:app --reload` |
-| `Application startup failed` (bcrypt) | bcrypt version ไม่เข้ากัน | รัน `pip install bcrypt==4.0.1` |
-| `ENOENT package.json` | รัน npm ผิดโฟลเดอร์ | ต้องรันใน `frontend/` เท่านั้น |
-| Login ไม่ผ่าน | Backend หรือ DB ยังไม่ได้เปิด | ตรวจสอบว่าเปิดครบทั้ง 3 ขั้นตอน |
-| `npm run dev` ไม่ทำงาน (Execution Policy) | PowerShell บล็อก script | รัน `Set-ExecutionPolicy RemoteSigned -Scope CurrentUser` |
+| **FastAPI** | 0.104+ | API Framework |
+| **SQLAlchemy** | 2.0+ | ORM |
+| **PostgreSQL** | 16 | Database |
+| **Pydantic** | 2.5+ | Data Validation |
+| **python-jose** | 3.3+ | JWT Token |
+| **passlib + bcrypt** | 1.7.4 + **4.0.1** | Password Hashing |
+| **Docker** | latest | Container สำหรับ DB |
 
+### Frontend
+| เทคโนโลยี | เวอร์ชัน | บทบาท |
+|---|---|---|
+| **Next.js** | 14.2.3 | React Framework (App Router) |
+| **TypeScript** | 5 | Type Safety |
+| **Tailwind CSS** | 3.4+ | Styling |
+| **Axios** | 1.6+ | HTTP Client |
+| **lucide-react** | latest | Icon Library |
+
+---
+
+## 🤝 สำหรับทีมพัฒนา
+
+### Git Workflow
+
+```bash
+# ดึงโค้ดล่าสุดก่อนทำงานเสมอ
+git pull origin main
+
+# สร้าง branch สำหรับฟีเจอร์ใหม่
+git checkout -b feature/ชื่อฟีเจอร์
+
+# Commit และ push
+git add -A
+git commit -m "feat: คำอธิบายการเปลี่ยนแปลง"
+git push origin feature/ชื่อฟีเจอร์
+```
+
+### ข้อควรระวัง
+
+> ⚠️ **ห้าม commit ไฟล์ต่อไปนี้:**
+> - `.venv/` — Python virtual environment
+> - `node_modules/` — Node packages
+> - `.env` — Secret keys (ถ้าเปลี่ยนค่าจาก default)
+> - `.next/` — Next.js build cache
+
+### เพิ่ม Column ใหม่ใน Database
+
+หากมีการเพิ่มฟิลด์ใน Model เช่น `price` ต้องแจ้งทีมให้ทำ:
+
+```powershell
+# Reset database ก่อน (ข้อมูลจะหาย แต่ seed ใหม่ให้อัตโนมัติ)
+docker compose down -v
+docker compose up -d
+# รัน backend ใหม่
+```
+
+---
+
+
+*อัพเดตล่าสุด: ตุลาคม 2026*

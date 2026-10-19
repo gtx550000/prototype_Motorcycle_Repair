@@ -536,7 +536,7 @@ export default function EmployeePage() {
   // Guard: owner only
   useEffect(() => {
     if (!isLoading && !isOwner) {
-      router.replace('/dashboard');
+      router.replace('/dashboard/store');
     }
   }, [isLoading, isOwner, router]);
 
@@ -697,9 +697,9 @@ export default function EmployeePage() {
         <div className="grid gap-4">
           {employees.map((emp) => (
             <div key={emp.id} className="bg-white rounded-xl shadow-sm border p-5">
-              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+              <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_360px_auto] lg:items-center">
                 {/* Info */}
-                <div className="flex items-center gap-4">
+                <div className="flex min-w-0 items-center gap-4">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg ${
                     emp.is_active ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-400'
                   }`}>
@@ -724,8 +724,8 @@ export default function EmployeePage() {
                 </div>
 
                 {/* Stats */}
-                <div className="flex items-center justify-around md:justify-center gap-6 text-center border-y md:border-y-0 py-3 md:py-0 border-slate-100">
-                  <div>
+                <div className="grid grid-cols-3 items-center gap-3 text-center border-y py-3 border-slate-100 lg:min-w-[360px] lg:border-y-0 lg:py-0">
+                  <div className="min-w-0">
                     <div className="flex items-center gap-1 text-amber-600 justify-center">
                       <Banknote className="w-4 h-4" />
                       <span className="font-bold text-lg">
@@ -735,14 +735,14 @@ export default function EmployeePage() {
                     <div className="text-xs text-slate-400">ค่าแรง/วัน</div>
                     {emp.wage_note && <div className="text-xs text-slate-400 italic max-w-[120px] truncate">{emp.wage_note}</div>}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="flex items-center gap-1 text-blue-600 justify-center">
                       <ShoppingBag className="w-4 h-4" />
                       <span className="font-bold text-lg">{emp.today_sales_count}</span>
                     </div>
                     <div className="text-xs text-slate-400">บิลที่ออก</div>
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <div className="flex items-center gap-1 text-green-600 justify-center">
                       <TrendingUp className="w-4 h-4" />
                       <span className="font-bold text-lg">
@@ -754,7 +754,7 @@ export default function EmployeePage() {
                 </div>
 
                 {/* Actions (Owner-only) */}
-                <div className="flex gap-2 self-end md:self-center flex-wrap">
+                <div className="flex flex-wrap gap-2 self-end lg:justify-self-end">
                   {/* แก้ไขข้อมูล */}
                   <button
                     onClick={() => setEditEmployee(emp)}

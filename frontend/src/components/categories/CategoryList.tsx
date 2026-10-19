@@ -40,12 +40,17 @@ export const CategoryList = () => {
   };
 
   const onFormSubmit = async (data: any) => {
-    if (selectedCategory) {
-      await editCategory(selectedCategory.id, data);
-    } else {
-      await addCategory(data);
+    try {
+      if (selectedCategory) {
+        await editCategory(selectedCategory.id, data);
+      } else {
+        await addCategory(data);
+      }
+      setIsFormOpen(false);
+      setSelectedCategory(undefined);
+    } catch (err: any) {
+      alert(err.response?.data?.detail || err.message || 'เกิดข้อผิดพลาดในการบันทึกข้อมูล');
     }
-    setIsFormOpen(false);
   };
 
   const onDeleteConfirm = async () => {
@@ -163,7 +168,10 @@ export const CategoryList = () => {
       {isFormOpen && (
         <CategoryForm 
           isOpen={isFormOpen}
-          onClose={() => setIsFormOpen(false)}
+          onClose={() => {
+            setIsFormOpen(false);
+            setSelectedCategory(undefined);
+          }}
           onSubmit={onFormSubmit}
           initialData={selectedCategory}
           categories={categories}

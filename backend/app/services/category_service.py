@@ -1,7 +1,8 @@
 import json
 import os
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, text
+from sqlalchemy.exc import IntegrityError
 from typing import Tuple, List, Optional
 from ..models.category import Category
 from ..schemas.category import CategoryCreate, CategoryUpdate
@@ -38,11 +39,26 @@ def get_category(db: Session, category_id: int) -> Category | None:
     return db.query(Category).filter(Category.id == category_id).first()
 
 def create_category(db: Session, category_data: CategoryCreate, user_id: int) -> Category:
-    db_category = Category(**category_data.model_dump(), created_by=user_id)
-    db.add(db_category)
-    db.commit()
-    db.refresh(db_category)
-    return db_category
+    try:
+        db_category = Category(**category_data.model_dump(), created_by=user_id)
+        db.add(db_category)
+        db.commit()
+        db.refresh(db_category)
+        return db_category
+    except IntegrityError:
+        db.rollback()
+        # If sequence was out of sync (e.g. after manual seeding), sync it and retry
+        try:
+            db.execute(text("SELECT setval(pg_get_serial_sequence('categories', 'id'), COALESCE(max(id), 1)) FROM categories;"))
+            db.commit()
+            db_category = Category(**category_data.model_dump(), created_by=user_id)
+            db.add(db_category)
+            db.commit()
+            db.refresh(db_category)
+            return db_category
+        except Exception:
+            db.rollback()
+            raise
 
 def update_category(db: Session, category_id: int, category_data: CategoryUpdate) -> Category | None:
     db_category = get_category(db, category_id)
@@ -81,3 +97,8 @@ def seed_categories_from_json(db: Session, json_path: str) -> None:
         db.add(category)
         
     db.commit()
+    try:
+        db.execute(text("SELECT setval(pg_get_serial_sequence('categories', 'id'), COALESCE(max(id), 1)) FROM categories;"))
+        db.commit()
+    except Exception:
+        pass

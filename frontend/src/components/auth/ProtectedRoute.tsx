@@ -9,9 +9,9 @@ export const ProtectedRoute = ({ children, requireOwner = false }: { children: R
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push('/login');
+      router.replace('/login');
     } else if (!isLoading && requireOwner && !isOwner) {
-      router.push('/dashboard');
+      router.replace('/dashboard/store');
     }
   }, [isLoading, isAuthenticated, isOwner, requireOwner, router]);
 

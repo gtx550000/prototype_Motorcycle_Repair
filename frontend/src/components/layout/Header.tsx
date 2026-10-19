@@ -8,7 +8,7 @@ export const Header = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="bg-white shadow-sm h-16 flex items-center justify-between px-6">
+    <header className="bg-white shadow-sm h-16 flex items-center justify-between px-6 print:hidden">
       <h1 className="text-xl font-bold text-gray-800">ระบบจัดการอะไหล่</h1>
       <div className="flex items-center gap-4">
         {user && (

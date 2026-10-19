@@ -11,3 +11,47 @@ body {
   color: var(--foreground);
   background: var(--background);
 }
+
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  html,
+  body {
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  .dashboard-shell,
+  .dashboard-content {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .receipt-print {
+    break-inside: auto;
+    color: #0f172a !important;
+  }
+
+  .receipt-print thead {
+    display: table-header-group;
+  }
+
+  .receipt-print tr,
+  .receipt-print header {
+    break-inside: avoid;
+  }
+
+  .receipt-print th {
+    color: #0f172a !important;
+  }
+}
