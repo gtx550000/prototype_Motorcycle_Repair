@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getToken, removeToken } from './auth';
+import { PurchaseOrder, PurchaseOrderItemInput, Supplier } from '@/types/purchase';
 
 const api = axios.create({
   baseURL: 'http://localhost:8000',
@@ -84,6 +85,44 @@ export const employeeAPI = {
     end_date?: string;
     employee_id?: number;
   }) => api.get('/api/employees/reports/sales', { params }),
+};
+
+export const purchaseAPI = {
+  getSuppliers: (params?: { search?: string; include_inactive?: boolean }) =>
+    api.get<Supplier[]>('/api/purchases/suppliers', { params }),
+  createSupplier: (data: {
+    code: string;
+    name: string;
+    phone?: string | null;
+    email?: string | null;
+    address?: string | null;
+    note?: string | null;
+  }) => api.post<Supplier>('/api/purchases/suppliers', data),
+  updateSupplier: (id: number, data: {
+    code?: string;
+    name?: string;
+    phone?: string | null;
+    email?: string | null;
+    address?: string | null;
+    note?: string | null;
+    is_active?: boolean;
+  }) => api.put<Supplier>(`/api/purchases/suppliers/${id}`, data),
+  getOrders: (supplierId: number) =>
+    api.get<PurchaseOrder[]>(`/api/purchases/suppliers/${supplierId}/orders`),
+  createOrder: (supplierId: number, data: {
+    order_date: string;
+    items: PurchaseOrderItemInput[];
+    discount_amount: number;
+    tax_rate: number;
+    initial_payment: number;
+    note?: string;
+  }) => api.post<PurchaseOrder>(`/api/purchases/suppliers/${supplierId}/orders`, data),
+  receiveItems: (orderId: number, items: { item_id: number; quantity: number }[]) =>
+    api.post<PurchaseOrder>(`/api/purchases/orders/${orderId}/receive`, { items }),
+  addPayment: (orderId: number, data: { amount: number; note?: string }) =>
+    api.post<PurchaseOrder>(`/api/purchases/orders/${orderId}/payments`, data),
+  cancelOrder: (orderId: number) =>
+    api.post<PurchaseOrder>(`/api/purchases/orders/${orderId}/cancel`),
 };
 
 export default api;

@@ -27,6 +27,8 @@ class CategoryUpdate(BaseModel):
 
 class CategoryResponse(CategoryBase):
     id: int
+    stock_quantity: int = 0
+    stock_tracked: bool = False
     created_by: Optional[int] = None
     created_at: datetime
     updated_at: datetime

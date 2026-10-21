@@ -47,6 +47,25 @@ body {
 }
 
 @media print {
+  body.printing-purchase-order .dashboard-shell {
+    visibility: hidden !important;
+  }
+
+  body.printing-purchase-order .purchase-print {
+    position: fixed !important;
+    inset: 0 auto auto 0 !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    background: #fff !important;
+    color: #0f172a !important;
+    visibility: visible !important;
+  }
+
+  body.printing-purchase-order .purchase-print * {
+    visibility: visible !important;
+  }
+
   html,
   body {
     width: auto !important;

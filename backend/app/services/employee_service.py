@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, and_
 
 from ..models.employee import EmployeeWage, SaleRecord
+from ..models.category import Category
 from ..models.user import User
 from ..schemas.employee import (
     EmployeeWageCreate, EmployeeWageUpdate,
@@ -85,6 +86,28 @@ def upsert_wage(db: Session, user_id: int, wage_data: EmployeeWageUpdate, update
 # ─── Sale Record ─────────────────────────────────────────────────────────────
 
 def create_sale_record(db: Session, sale_data: SaleRecordCreate) -> SaleRecord:
+    quantities = {}
+    for item in sale_data.items:
+        quantities[item.id] = quantities.get(item.id, 0) + item.qty
+    categories = {}
+    if quantities:
+        categories = {
+            category.id: category
+            for category in db.query(Category)
+            .filter(Category.id.in_(quantities))
+            .order_by(Category.id)
+            .with_for_update()
+            .all()
+        }
+    for category_id, quantity in quantities.items():
+        category = categories.get(category_id)
+        if category and category.stock_tracked and category.stock_quantity < quantity:
+            raise ValueError(f"สินค้า {category.name} คงเหลือ {category.stock_quantity} ชิ้น ไม่เพียงพอ")
+    for category_id, quantity in quantities.items():
+        category = categories.get(category_id)
+        if category and category.stock_tracked:
+            category.stock_quantity -= quantity
+
     items_json_str = json.dumps([item.model_dump() for item in sale_data.items], ensure_ascii=False)
     record = SaleRecord(
         employee_id=sale_data.employee_id,
@@ -290,4 +313,3 @@ def get_sales_report(
         top_items=top_items,
         records=sale_record_responses
     )
-

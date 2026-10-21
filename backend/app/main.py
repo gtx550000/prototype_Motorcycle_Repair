@@ -3,17 +3,26 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base, get_db
-from .routers import auth, categories, employees
+from .routers import auth, categories, employees, purchases
 from .schemas.user import UserCreate
 from .services.auth_service import get_user_by_username, create_user
 from .services.category_service import seed_categories_from_json
 from .models.user import User
-from .models import employee  # noqa: F401  — import so create_all sees the tables
+from .models import employee, purchase  # noqa: F401  — import so create_all sees the tables
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Create tables
     Base.metadata.create_all(bind=engine)
+    # Add the stock field to existing category tables without disturbing current products.
+    from sqlalchemy import text
+    with engine.begin() as connection:
+        connection.execute(text(
+            "ALTER TABLE categories ADD COLUMN IF NOT EXISTS stock_quantity INTEGER NOT NULL DEFAULT 0"
+        ))
+        connection.execute(text(
+            "ALTER TABLE categories ADD COLUMN IF NOT EXISTS stock_tracked BOOLEAN NOT NULL DEFAULT FALSE"
+        ))
     
     # Seed data
     db = next(get_db())
@@ -58,6 +67,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(categories.router)
 app.include_router(employees.router)
+app.include_router(purchases.router)
 
 @app.get("/")
 def read_root():

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional, List, Any
 from datetime import datetime, date
 
@@ -56,12 +56,12 @@ class EmployeeWithWage(BaseModel):
 # ─── Sale Record ─────────────────────────────────────────────────────────────
 
 class SaleItemSchema(BaseModel):
-    id: int
+    id: int = Field(gt=0)
     name: str
     name_en: Optional[str] = None
     icon: Optional[str] = None
-    price: float
-    qty: int
+    price: float = Field(ge=0)
+    qty: int = Field(gt=0)
 
 
 class SaleRecordCreate(BaseModel):
@@ -72,7 +72,7 @@ class SaleRecordCreate(BaseModel):
     customer_name: Optional[str] = None
     note: Optional[str] = None
     payment_method: str
-    total_amount: float
+    total_amount: float = Field(ge=0)
     items: List[SaleItemSchema] = []
 
 
@@ -127,4 +127,3 @@ class SalesReportResponse(BaseModel):
     employees_summary: List[EmployeeSaleStat] = []
     top_items: List[ItemSaleStat] = []
     records: List[SaleRecordResponse] = []
-

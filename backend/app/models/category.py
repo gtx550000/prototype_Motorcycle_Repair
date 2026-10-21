@@ -15,6 +15,8 @@ class Category(Base):
     is_active = Column(Boolean, default=True)
     sort_order = Column(Integer, default=0)
     price = Column(Numeric(10, 2), default=0.00, nullable=False)
+    stock_quantity = Column(Integer, default=0, nullable=False)
+    stock_tracked = Column(Boolean, default=False, nullable=False)
     created_by = Column(Integer, ForeignKey('users.id'), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

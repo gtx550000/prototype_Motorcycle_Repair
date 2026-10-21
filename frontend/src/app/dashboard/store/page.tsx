@@ -91,6 +91,8 @@ export default function POSPage() {
   const addToCart = (cat: Category) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.id === cat.id);
+      if (cat.stock_tracked && existing && existing.qty >= cat.stock_quantity) return prev;
+      if (cat.stock_tracked && !existing && cat.stock_quantity < 1) return prev;
       if (existing) {
         return prev.map((item) =>
           item.id === cat.id ? { ...item, qty: item.qty + 1 } : item
@@ -211,53 +213,60 @@ export default function POSPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {filteredProducts.map((item) => (
-                <div
-                  key={item.id}
-                  className={`bg-gradient-to-br ${getCardColor(item)} p-4 rounded-xl shadow-sm border relative group`}
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="font-semibold text-base flex items-center gap-2">
-                      <span className="text-xl">{item.icon || '📦'}</span>
-                      {item.name}
-                    </h3>
-                    <button
-                      onClick={() => addToCart(item)}
-                      className="bg-slate-800 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1 hover:bg-blue-600 transition"
-                    >
-                      <Plus className="w-3 h-3" /> เพิ่ม
-                    </button>
-                  </div>
+              {filteredProducts.map((item) => {
+                const quantityInCart = cart.find((cartItem) => cartItem.id === item.id)?.qty || 0;
+                const stockAvailable = !item.stock_tracked || quantityInCart < item.stock_quantity;
+                return (
+                  <div
+                    key={item.id}
+                    className={`bg-gradient-to-br ${getCardColor(item)} p-4 rounded-xl shadow-sm border relative group`}
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="font-semibold text-base flex items-center gap-2">
+                        <span className="text-xl">{item.icon || '📦'}</span>
+                        {item.name}
+                      </h3>
+                      <button
+                        onClick={() => addToCart(item)}
+                        disabled={!stockAvailable}
+                        className="bg-slate-800 text-white text-xs px-3 py-1.5 rounded flex items-center gap-1 hover:bg-blue-600 transition disabled:cursor-not-allowed disabled:bg-slate-300"
+                      >
+                        <Plus className="w-3 h-3" /> {stockAvailable ? 'เพิ่ม' : 'สต็อกไม่พอ'}
+                      </button>
+                    </div>
 
-                  <div className="text-sm text-slate-500 mb-1">
-                    {item.name_en || '-'}
-                  </div>
+                    <div className="text-sm text-slate-500 mb-1">
+                      {item.name_en || '-'}
+                    </div>
+                    <div className="text-xs text-slate-500">
+                      สต็อก: <span className="font-semibold text-slate-700">{item.stock_tracked ? item.stock_quantity : 'ยังไม่เริ่มติดตาม'}</span>
+                    </div>
 
-                  <div className="flex justify-between items-end mt-2">
-                    <span className="text-xs font-mono text-slate-400 bg-white/60 px-2 py-0.5 rounded">
-                      {item.description?.replace('รหัสอ้างอิง: ', '') || '-'}
-                    </span>
-                    <span
-                      className={`text-xs px-2 py-0.5 rounded-full ${
-                        item.is_active
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-red-100 text-red-600'
-                      }`}
-                    >
-                      {item.is_active ? '● พร้อมขาย' : '● ปิดการขาย'}
-                    </span>
+                    <div className="flex justify-between items-end mt-2">
+                      <span className="text-xs font-mono text-slate-400 bg-white/60 px-2 py-0.5 rounded">
+                        {item.description?.replace('รหัสอ้างอิง: ', '') || '-'}
+                      </span>
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full ${
+                          item.is_active
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-600'
+                        }`}
+                      >
+                        {item.is_active ? '● พร้อมขาย' : '● ปิดการขาย'}
+                      </span>
+                    </div>
+                    <div className="mt-2 text-right">
+                      <span className="text-base font-bold text-slate-800">
+                        {item.price > 0
+                          ? `฿${Number(item.price).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                          : <span className="text-xs text-slate-400 font-normal">ยังไม่มีราคา</span>
+                        }
+                      </span>
+                    </div>
                   </div>
-                  {/* แสดงราคา */}
-                  <div className="mt-2 text-right">
-                    <span className="text-base font-bold text-slate-800">
-                      {item.price > 0
-                        ? `฿${Number(item.price).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                        : <span className="text-xs text-slate-400 font-normal">ยังไม่มีราคา</span>
-                      }
-                    </span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
@@ -334,7 +343,7 @@ export default function POSPage() {
                     className="w-full mt-2 bg-amber-500 text-white py-2.5 rounded-lg font-medium hover:bg-amber-600 transition flex items-center justify-center gap-2 shadow-sm"
                   >
                     <FileText className="w-4 h-4" />
-                     ใบเสนอราคา (ให้ลูกค้าดูก่อน)
+                    ใบเสนอราคา
                   </button>
                   <button
                     onClick={() => {

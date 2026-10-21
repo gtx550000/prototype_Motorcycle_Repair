@@ -145,7 +145,10 @@ def record_sale(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    record = create_sale_record(db, sale_data)
+    try:
+        record = create_sale_record(db, sale_data)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
     # map employee_name
     emp = db.query(User).filter(User.id == record.employee_id).first()
     return SaleRecordResponse(
@@ -205,4 +208,3 @@ def get_sales_report_endpoint(
         raise HTTPException(status_code=400, detail="วันที่เริ่มต้นต้องไม่มากกว่าวันที่สิ้นสุด")
 
     return get_sales_report(db, start_date=start_date, end_date=end_date, employee_id=employee_id)
-

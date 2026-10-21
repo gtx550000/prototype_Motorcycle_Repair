@@ -8,6 +8,8 @@ export interface Category {
   is_active: boolean;
   sort_order: number;
   price: number;
+  stock_quantity: number;
+  stock_tracked: boolean;
   created_by: number;
   created_at: string;
   updated_at: string;

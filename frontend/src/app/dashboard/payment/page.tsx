@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Check, CreditCard, Banknote, Printer, ChevronRight, ChevronLeft,
   User, Wrench, CheckCircle, ArrowLeft, QrCode, Users
@@ -115,7 +116,8 @@ export default function MultiStepCheckout() {
       nextStep();
     } catch (e) {
       console.error('Failed to record sale:', e);
-      setPaymentError('บันทึกการขายไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง');
+      const detail = axios.isAxiosError(e) ? e.response?.data?.detail : undefined;
+      setPaymentError(typeof detail === 'string' ? detail : 'บันทึกการขายไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง');
     } finally {
       setSaving(false);
     }
