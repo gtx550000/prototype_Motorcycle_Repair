@@ -17,6 +17,35 @@ body {
   margin: 12mm;
 }
 
+.receipt-print-small .receipt-secondary,
+.receipt-print-small .receipt-note,
+.receipt-print-small .receipt-footer,
+.receipt-print-small .receipt-signatures {
+  display: none !important;
+}
+
+.receipt-print-small .receipt-meta {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.receipt-print-small .receipt-items th.receipt-unit-price,
+.receipt-print-small .receipt-items td.receipt-unit-price {
+  display: none !important;
+}
+
+.quotation-paper-small .quotation-meta {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.quotation-paper-small .quotation-secondary,
+.quotation-paper-small .quotation-unit-price,
+.quotation-paper-small .quotation-summary-words,
+.quotation-paper-small .quotation-signatures,
+.quotation-paper-small .quotation-footer,
+.quotation-paper-small .quotation-notes {
+  display: none !important;
+}
+
 @media print {
   html,
   body {
@@ -35,6 +64,13 @@ body {
     height: auto !important;
     min-height: 0 !important;
     overflow: visible !important;
+  }
+
+  .quotation-layout {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
   }
 
   .receipt-print {

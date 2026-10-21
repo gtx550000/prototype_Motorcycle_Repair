@@ -29,6 +29,7 @@ export default function MultiStepCheckout() {
   const [paymentError, setPaymentError] = useState('');
   const [saleId, setSaleId] = useState<number | null>(null);
   const [saleCreatedAt, setSaleCreatedAt] = useState<string | null>(null);
+  const [printFormat, setPrintFormat] = useState<'large' | 'small'>('large');
 
   // ข้อมูลรถ/ลูกค้า
   const [customerInfo, setCustomerInfo] = useState({
@@ -329,17 +330,24 @@ export default function MultiStepCheckout() {
                 <p className="text-slate-500 mb-6">บันทึกข้อมูลการซ่อมและรับชำระเงินเรียบร้อยแล้ว</p>
               </div>
 
-              <section className="receipt-print mx-auto max-w-3xl border border-slate-200 rounded-xl p-5 sm:p-8 print:max-w-none print:rounded-none print:border-0 print:p-0">
+              <p className="print:hidden text-center text-sm font-semibold text-slate-600 mb-3">
+                ตัวอย่าง{printFormat === 'large' ? 'บิลใหญ่ · ฟอร์มเต็มพร้อมลายเซ็น' : 'บิลเล็ก · ใบเสร็จปกติ'}
+              </p>
+              <section className={`receipt-print mx-auto max-w-3xl border border-slate-200 rounded-2xl p-8 sm:p-12 shadow-lg print:max-w-none print:rounded-none print:border-0 print:p-0 print:shadow-none ${printFormat === 'small' ? 'receipt-print-small' : ''}`}>
                 <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between border-b-2 border-slate-800 pb-5">
                   <div>
                     <div className="flex items-center gap-3">
                       <span className="text-3xl" aria-hidden="true">🏍️</span>
                       <div>
-                        <h2 className="text-lg sm:text-xl font-bold text-slate-900">ร้านซ่อมมอเตอร์ไซค์</h2>
+                        <h2 className="text-lg sm:text-xl font-bold text-slate-900">MotoShop Service &amp; Parts</h2>
+                        <p className="receipt-secondary text-xs text-slate-600">ระบบจัดการอะไหล่และร้านซ่อมมอเตอร์ไซค์</p>
                         <p className="text-xs text-slate-500">ใบเสร็จรับเงิน / RECEIPT</p>
                       </div>
                     </div>
-                    <p className="text-xs text-slate-500 mt-3">ขอบคุณที่ใช้บริการ</p>
+                    <p className="receipt-secondary text-xs text-slate-500 mt-3">
+                      123/45 ถนนพัฒนาการ แขวงสวนหลวง กรุงเทพมหานคร 10250<br />
+                      โทรศัพท์: 081-234-5678 | อีเมล: contact@motoshop.local
+                    </p>
                   </div>
                   <div className="sm:text-right text-sm">
                     <p className="font-bold text-slate-900">เลขที่ใบเสร็จ: {saleId ? `BILL-${String(saleId).padStart(5, '0')}` : '-'}</p>
@@ -348,48 +356,54 @@ export default function MultiStepCheckout() {
                   </div>
                 </header>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 py-5 border-b border-slate-200 text-sm">
+                <div className="receipt-meta grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs mb-6">
                   <div className="space-y-1">
                     <h3 className="font-semibold text-slate-700">ข้อมูลลูกค้า</h3>
                     <p>ชื่อ: {customerInfo.customerName || 'ลูกค้าทั่วไป'}</p>
-                    <p>ทะเบียนรถ: {customerInfo.licensePlate || '-'}</p>
-                    <p>รุ่นรถ: {customerInfo.vehicleModel || '-'}</p>
+                    <p className="receipt-secondary">ทะเบียนรถ: {customerInfo.licensePlate || '-'}</p>
+                    <p className="receipt-secondary">ยี่ห้อ/รุ่นรถ: {customerInfo.vehicleModel || '-'}</p>
                   </div>
                   <div className="space-y-1">
-                    <h3 className="font-semibold text-slate-700">ข้อมูลการชำระเงิน</h3>
-                    <p>พนักงาน: {selectedEmployee?.full_name || user?.full_name || '-'}</p>
+                    <h3 className="font-semibold text-slate-700">ข้อมูลการขายและชำระเงิน</h3>
+                    <p className="receipt-secondary">พนักงาน: {selectedEmployee?.full_name || user?.full_name || '-'}</p>
                     <p>ช่องทาง: {paymentMethod === 'cash' ? 'เงินสด' : paymentMethod === 'transfer' ? 'โอน / QR Code' : 'บัตรเครดิต'}</p>
-                    {paymentMethod === 'cash' && <p>รับเงิน: ฿{cashReceivedNum.toLocaleString()}</p>}
+                    {paymentMethod === 'cash' && <p className="receipt-secondary">รับเงิน: ฿{cashReceivedNum.toLocaleString()}</p>}
                   </div>
                 </div>
 
                 <div className="overflow-x-auto print:overflow-visible">
-                  <table className="w-full text-sm border-collapse">
+                  <table className="receipt-items w-full text-xs border-collapse">
                     <thead>
-                      <tr className="border-b-2 border-slate-300 text-left">
-                        <th className="py-3 pr-2 font-semibold">รายการ</th>
-                        <th className="py-3 px-2 text-right font-semibold whitespace-nowrap">ราคา/หน่วย</th>
-                        <th className="py-3 px-2 text-center font-semibold">จำนวน</th>
-                        <th className="py-3 pl-2 text-right font-semibold whitespace-nowrap">รวม (บาท)</th>
+                      <tr className="bg-slate-800 text-white font-semibold text-left">
+                        <th className="receipt-secondary py-2.5 px-3 text-center font-semibold">ลำดับ</th>
+                        <th className="py-2.5 px-3 font-semibold">รายการ</th>
+                        <th className="receipt-unit-price py-2.5 px-3 text-right font-semibold whitespace-nowrap">ราคา/หน่วย</th>
+                        <th className="py-2.5 px-3 text-center font-semibold">จำนวน</th>
+                        <th className="py-2.5 px-3 text-right font-semibold whitespace-nowrap">รวม (บาท)</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {cartItems.map((item) => (
+                      {cartItems.map((item, index) => (
                         <tr key={item.id} className="border-b border-slate-100">
-                          <td className="py-3 pr-2">{item.icon || '📦'} {item.name}</td>
-                          <td className="py-3 px-2 text-right whitespace-nowrap">฿{item.price.toLocaleString()}</td>
-                          <td className="py-3 px-2 text-center">{item.qty}</td>
-                          <td className="py-3 pl-2 text-right whitespace-nowrap">฿{(item.price * item.qty).toLocaleString()}</td>
+                          <td className="receipt-secondary py-2.5 px-3 text-center">{index + 1}</td>
+                          <td className="py-2.5 px-3">{item.icon || '📦'} {item.name}</td>
+                          <td className="receipt-unit-price py-2.5 px-3 text-right whitespace-nowrap">฿{item.price.toLocaleString()}</td>
+                          <td className="py-2.5 px-3 text-center">{item.qty}</td>
+                          <td className="py-2.5 px-3 text-right whitespace-nowrap">฿{(item.price * item.qty).toLocaleString()}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
 
-                <div className="ml-auto mt-5 w-full sm:max-w-xs space-y-2 text-sm">
-                  <div className="flex justify-between font-bold text-base border-t border-slate-300 pt-3">
-                    <span>ยอดชำระทั้งสิ้น</span>
+                <div className="receipt-total ml-auto mt-5 w-full sm:max-w-xs space-y-2 text-sm">
+                  <div className="receipt-secondary flex justify-between text-slate-600">
+                    <span>รวมรายการ ({totalQty} ชิ้น)</span>
                     <span>฿{totalAmount.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 px-3 bg-slate-900 text-white rounded-xl text-sm font-bold">
+                    <span>ยอดสุทธิทั้งสิ้น (Net Total):</span>
+                    <span className="text-base">฿{totalAmount.toLocaleString()}</span>
                   </div>
                   {paymentMethod === 'cash' && (
                     <div className="flex justify-between text-slate-600">
@@ -398,15 +412,50 @@ export default function MultiStepCheckout() {
                     </div>
                   )}
                 </div>
+                <div className="receipt-signatures grid grid-cols-2 gap-8 text-center text-sm text-slate-600 mt-12 pt-6 border-t border-dashed border-slate-300">
+                  <div>
+                    <p className="mb-12 font-medium">ลงชื่อ ...........................................................</p>
+                    <p className="font-bold text-slate-800">({selectedEmployee?.full_name || user?.full_name || 'ผู้จัดทำ'})</p>
+                    <p className="text-xs text-slate-400 mt-1">ผู้รับเงิน / ผู้จัดทำใบเสร็จ</p>
+                  </div>
+                  <div>
+                    <p className="mb-12 font-medium">ลงชื่อ ...........................................................</p>
+                    <p className="font-bold text-slate-800">({customerInfo.customerName || '...........................................................'})</p>
+                    <p className="text-xs text-slate-400 mt-1">ลูกค้า / ผู้ชำระเงิน</p>
+                  </div>
+                </div>
                 {customerInfo.note && (
-                  <p className="mt-5 text-sm text-slate-600 border-t border-slate-200 pt-3">หมายเหตุ: {customerInfo.note}</p>
+                  <p className="receipt-note mt-5 text-sm text-slate-600 border-t border-slate-200 pt-3">หมายเหตุ: {customerInfo.note}</p>
                 )}
-                <p className="text-center text-xs text-slate-500 mt-8">เอกสารนี้ออกจากระบบเพื่อเป็นหลักฐานการรับชำระเงิน</p>
+                <p className="receipt-footer text-center text-xs text-slate-500 mt-8">เอกสารนี้ออกจากระบบเพื่อเป็นหลักฐานการรับชำระเงิน</p>
               </section>
 
               <div className="print:hidden flex flex-col sm:flex-row gap-3 justify-center mt-6">
+                <div>
+                  <div className="flex items-center justify-center gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1">
+                    <button
+                      type="button"
+                      aria-pressed={printFormat === 'large'}
+                      onClick={() => setPrintFormat('large')}
+                      className={`whitespace-nowrap px-4 py-2 rounded-lg text-sm font-semibold transition ${printFormat === 'large' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                    >
+                      เลือกบิลใหญ่
+                    </button>
+                    <button
+                      type="button"
+                      aria-pressed={printFormat === 'small'}
+                      onClick={() => setPrintFormat('small')}
+                      className={`whitespace-nowrap px-4 py-2 rounded-lg text-sm font-semibold transition ${printFormat === 'small' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                    >
+                      เลือกบิลเล็ก
+                    </button>
+                  </div>
+                  <p className="mt-1 text-center text-xs text-slate-500">
+                    {printFormat === 'large' ? 'ฟอร์มเต็มพร้อมรายละเอียดและลายเซ็น' : 'ใบเสร็จปกติแบบกระชับ'}
+                  </p>
+                </div>
                 <button onClick={handlePrintReceipt} className="flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700">
-                  <Printer className="w-5 h-5" /> พิมพ์ใบเสร็จ
+                  <Printer className="w-5 h-5" /> {printFormat === 'large' ? 'ออกบิลใหญ่' : 'ออกบิลเล็ก'}
                 </button>
                 <button onClick={goBackToStore}
                   className="flex items-center justify-center gap-2 border border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-medium hover:bg-slate-50">

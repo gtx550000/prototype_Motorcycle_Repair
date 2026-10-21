@@ -87,6 +87,7 @@ export default function QuotationPage() {
   const [laborCost, setLaborCost] = useState<number>(200);
   const [laborDescription, setLaborDescription] = useState('ค่าแรงและบริการช่างติดตั้ง / ตรวจเช็คระบบ');
   const [discount, setDiscount] = useState<number>(0);
+  const [printFormat, setPrintFormat] = useState<'large' | 'small'>('large');
 
   // ข้อมูลลูกค้าและรถ
   const [customerName, setCustomerName] = useState('');
@@ -194,7 +195,25 @@ export default function QuotationPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+            <div className="flex shrink-0 items-center gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1">
+              <button
+                type="button"
+                aria-pressed={printFormat === 'large'}
+                onClick={() => setPrintFormat('large')}
+                className={`min-w-[76px] whitespace-nowrap px-3 py-2 rounded-lg text-xs font-semibold transition ${printFormat === 'large' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+              >
+                บิลใหญ่
+              </button>
+              <button
+                type="button"
+                aria-pressed={printFormat === 'small'}
+                onClick={() => setPrintFormat('small')}
+                className={`min-w-[76px] whitespace-nowrap px-3 py-2 rounded-lg text-xs font-semibold transition ${printFormat === 'small' ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+              >
+                บิลเล็ก
+              </button>
+            </div>
             <button
               onClick={handlePrint}
               className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-800 text-white rounded-xl text-sm font-medium hover:bg-slate-700 transition shadow-sm"
@@ -212,7 +231,7 @@ export default function QuotationPage() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="quotation-layout max-w-6xl mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* ──────────────── ฝั่งซ้าย: ฟอร์มตั้งค่าตัวเลือก (ซ่อนตอนพิมพ์) ──────────────── */}
         <div className="print:hidden space-y-5">
           {/* กล่องตัวเลือกการคิดราคา */}
@@ -410,7 +429,7 @@ export default function QuotationPage() {
         {/* ──────────────── ฝั่งขวา / พื้นที่พิมพ์: ตัวกระดาษใบเสนอราคา (Printable Document) ──────────────── */}
         <div className="lg:col-span-2">
           {/* Printable Paper Canvas */}
-          <div className="bg-white p-8 sm:p-12 rounded-2xl shadow-lg border border-slate-200 print:shadow-none print:border-none print:p-0 print:m-0 print:w-full print:rounded-none">
+          <div className={`quotation-paper bg-white p-8 sm:p-12 rounded-2xl shadow-lg border border-slate-200 print:shadow-none print:border-none print:p-0 print:m-0 print:w-full print:rounded-none ${printFormat === 'small' ? 'quotation-paper-small' : ''}`}>
             {/* หัวเอกสาร */}
             <div className="flex justify-between items-start border-b-2 border-slate-800 pb-5 mb-6">
               <div>
@@ -421,7 +440,7 @@ export default function QuotationPage() {
                     <p className="text-xs text-slate-600">ระบบจัดการอะไหล่และร้านซ่อมมอเตอร์ไซค์</p>
                   </div>
                 </div>
-                <p className="text-xs text-slate-500 mt-2 max-w-xs leading-relaxed">
+                <p className="quotation-secondary text-xs text-slate-500 mt-2 max-w-xs leading-relaxed">
                   123/45 ถนนพัฒนาการ แขวงสวนหลวง กรุงเทพมหานคร 10250<br />
                   โทรศัพท์: 081-234-5678 | อีเมล: contact@motoshop.local
                 </p>
@@ -435,22 +454,22 @@ export default function QuotationPage() {
                 <p className="text-xs text-slate-500 mt-1">
                   วันที่ออก: <span className="font-medium text-slate-700">{todayStr}</span>
                 </p>
-                <p className="text-xs text-amber-700 font-medium mt-0.5">
+                <p className="quotation-secondary text-xs text-amber-700 font-medium mt-0.5">
                   ใช้ได้ถึง: {validUntilStr}
                 </p>
               </div>
             </div>
 
             {/* กล่องข้อมูลลูกค้า & รถ */}
-            <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs mb-6">
+            <div className="quotation-meta grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs mb-6">
               <div className="space-y-1">
                 <p className="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">ข้อมูลลูกค้า (Customer)</p>
                 <p><span className="text-slate-500">ชื่อลูกค้า:</span> <span className="font-semibold text-slate-800">{customerName || 'ลูกค้าทั่วไป (ยังไม่ระบุชื่อ)'}</span></p>
-                {customerPhone && <p><span className="text-slate-500">เบอร์โทร:</span> <span className="font-medium text-slate-800">{customerPhone}</span></p>}
-                <p><span className="text-slate-500">ผู้จัดทำข้อเสนอ:</span> <span className="font-medium text-slate-800">{user?.full_name || user?.username || 'พนักงานหน้าร้าน'}</span></p>
+                {customerPhone && <p className="quotation-secondary"><span className="text-slate-500">เบอร์โทร:</span> <span className="font-medium text-slate-800">{customerPhone}</span></p>}
+                <p className="quotation-secondary"><span className="text-slate-500">ผู้จัดทำข้อเสนอ:</span> <span className="font-medium text-slate-800">{user?.full_name || user?.username || 'พนักงานหน้าร้าน'}</span></p>
               </div>
 
-              <div className="space-y-1 border-l pl-4 border-slate-200">
+              <div className="quotation-secondary space-y-1 border-l pl-4 border-slate-200">
                 <p className="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">ข้อมูลรถ (Vehicle Info)</p>
                 <p><span className="text-slate-500">ทะเบียนรถ:</span> <span className="font-mono font-semibold text-slate-800">{licensePlate || '-'}</span></p>
                 <p><span className="text-slate-500">ยี่ห้อ/รุ่นรถ:</span> <span className="font-medium text-slate-800">{vehicleModel || '-'}</span></p>
@@ -463,10 +482,10 @@ export default function QuotationPage() {
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr className="bg-slate-800 text-white font-semibold">
-                    <th className="py-2.5 px-3 w-10 text-center rounded-l">ลำดับ</th>
+                    <th className="quotation-secondary py-2.5 px-3 w-10 text-center rounded-l">ลำดับ</th>
                     <th className="py-2.5 px-3">รายการอะไหล่ / บริการ</th>
                     <th className="py-2.5 px-3 text-center w-20">จำนวน</th>
-                    <th className="py-2.5 px-3 text-right w-24">ราคา/หน่วย</th>
+                    <th className="quotation-unit-price py-2.5 px-3 text-right w-24">ราคา/หน่วย</th>
                     <th className="py-2.5 px-3 text-right w-28 rounded-r">จำนวนเงิน (บาท)</th>
                   </tr>
                 </thead>
@@ -475,16 +494,16 @@ export default function QuotationPage() {
                     const rowTotal = item.price * item.qty;
                     return (
                       <tr key={item.id} className="hover:bg-slate-50/50">
-                        <td className="py-2.5 px-3 text-center text-slate-400 font-mono">{index + 1}</td>
+                        <td className="quotation-secondary py-2.5 px-3 text-center text-slate-400 font-mono">{index + 1}</td>
                         <td className="py-2.5 px-3 font-medium text-slate-800">
                           <span className="mr-1.5">{item.icon || '📦'}</span>
                           {item.name}
                           {item.name_en && (
-                            <span className="block text-[11px] text-slate-400 font-normal">{item.name_en}</span>
+                            <span className="quotation-secondary block text-[11px] text-slate-400 font-normal">{item.name_en}</span>
                           )}
                         </td>
                         <td className="py-2.5 px-3 text-center font-bold text-slate-700">{item.qty}</td>
-                        <td className="py-2.5 px-3 text-right font-mono">
+                        <td className="quotation-unit-price py-2.5 px-3 text-right font-mono">
                           ฿{Number(item.price).toLocaleString('th-TH', { minimumFractionDigits: 2 })}
                         </td>
                         <td className="py-2.5 px-3 text-right font-bold font-mono text-slate-900">
@@ -497,7 +516,7 @@ export default function QuotationPage() {
                   {/* แถวแสดงค่าแรงช่าง (ถ้าเลือกไว้) */}
                   {includeLabor && effectiveLabor > 0 && (
                     <tr className="bg-amber-50/60 font-medium text-amber-900 border-t-2 border-amber-200">
-                      <td className="py-2.5 px-3 text-center font-mono text-amber-600">{cartItems.length + 1}</td>
+                      <td className="quotation-secondary py-2.5 px-3 text-center font-mono text-amber-600">{cartItems.length + 1}</td>
                       <td className="py-2.5 px-3">
                         <div className="flex items-center gap-1.5 font-bold">
                           <Wrench className="w-3.5 h-3.5 text-amber-600" />
@@ -506,7 +525,7 @@ export default function QuotationPage() {
                         <span className="block text-[11px] text-amber-700 font-normal">{laborDescription}</span>
                       </td>
                       <td className="py-2.5 px-3 text-center font-bold">1 งาน</td>
-                      <td className="py-2.5 px-3 text-right font-mono">
+                      <td className="quotation-unit-price py-2.5 px-3 text-right font-mono">
                         ฿{effectiveLabor.toLocaleString('th-TH', { minimumFractionDigits: 2 })}
                       </td>
                       <td className="py-2.5 px-3 text-right font-bold font-mono text-amber-900">
@@ -521,7 +540,7 @@ export default function QuotationPage() {
             {/* ส่วนสรุปตัวเลขและตัวอักษรไทย */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t-2 border-slate-200 pt-4 mb-8">
               {/* ตัวหนังสือบาทไทย */}
-              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs flex flex-col justify-between">
+              <div className="quotation-summary-words bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs flex flex-col justify-between">
                 <div>
                   <span className="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">จำนวนเงินตัวอักษร:</span>
                   <p className="font-bold text-slate-800 text-sm">
@@ -529,7 +548,7 @@ export default function QuotationPage() {
                   </p>
                 </div>
                 {notes && (
-                  <p className="text-[11px] text-slate-500 italic mt-3 pt-2 border-t border-slate-200">
+                  <p className="quotation-notes text-[11px] text-slate-500 italic mt-3 pt-2 border-t border-slate-200">
                     หมายเหตุ: {notes}
                   </p>
                 )}
@@ -566,7 +585,7 @@ export default function QuotationPage() {
             </div>
 
             {/* ลายเซ็นและข้อตกลง */}
-            <div className="grid grid-cols-2 gap-8 text-center text-xs text-slate-600 pt-6 border-t border-dashed border-slate-300">
+            <div className="quotation-signatures grid grid-cols-2 gap-8 text-center text-xs text-slate-600 pt-6 border-t border-dashed border-slate-300">
               <div>
                 <p className="mb-12 font-medium">ลงชื่อ ...........................................................</p>
                 <p className="font-bold text-slate-800">({user?.full_name || user?.username || 'ผู้เสนอราคา'})</p>
@@ -581,7 +600,7 @@ export default function QuotationPage() {
             </div>
 
             {/* Footer คำเตือน */}
-            <div className="mt-8 pt-4 border-t border-slate-100 text-[10px] text-slate-400 text-center flex items-center justify-center gap-1.5">
+            <div className="quotation-footer mt-8 pt-4 border-t border-slate-100 text-[10px] text-slate-400 text-center flex items-center justify-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
               เอกสารนี้ออกโดยระบบบริหารจัดการร้าน MotoShop POS • ยังไม่มีผลตัดสต็อกสินค้าจนกว่าจะได้รับชำระเงินจริง
             </div>
@@ -591,4 +610,3 @@ export default function QuotationPage() {
     </div>
   );
 }
-
